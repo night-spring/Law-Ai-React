@@ -1,0 +1,16 @@
+/* Landing Page Styles */
+
+.landing {
+  font-family: Arial, sans-serif;
+}
+
+
+
+.footer {
+  background-color: #1e3a8a;
+  color: white;
+}
+
+.features div {
+  margin-bottom: 1rem;
+}

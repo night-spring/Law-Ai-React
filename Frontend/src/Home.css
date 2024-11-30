@@ -1,0 +1,12 @@
+/* Home.css */
+.home-container {
+    display: flex;
+  }
+  
+  .main-content {
+    margin-left: 260px; /* Width of the sidebar + some space */
+    padding: 20px;
+    flex: 1; /* Take up remaining space */
+  }
+
+  

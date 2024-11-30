@@ -1,0 +1,86 @@
+/* Container for Key Features */
+.key-features {
+    text-align: center;
+    padding: 50px 0;
+    transition: background-color 0.3s ease;
+  }
+  
+  .key-features.light {
+    background-color: #f9f9f9;
+    color: #333;
+  }
+  
+  .key-features.dark {
+    background-color: #1e1e1e;
+    color: #f4f4f4;
+  }
+  
+  /* Section Title */
+  .section-title {
+    font-size: 36px;
+    margin-bottom: 40px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    transition: color 0.3s ease;
+  }
+  
+  .section-title.light {
+    color: #007bff;
+  }
+  
+  .section-title.dark {
+    color: #00d4ff;
+  }
+  
+  /* Features Container */
+  .features-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+  
+  /* Feature Card */
+  .feature-card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    width: 300px;
+    height: 250px;
+  }
+  
+  .feature-card.dark {
+    background-color: #333;
+    color: #f4f4f4;
+  }
+  
+  .feature-card h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+  }
+  
+  .feature-card p {
+    font-size: 16px;
+    color: #666;
+  }
+  
+  .feature-card p.dark {
+    color: #ccc;
+  }
+  
+  /* Hover animation */
+  .scale-on-hover:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .features-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  

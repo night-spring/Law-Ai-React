@@ -1,0 +1,127 @@
+/* Container styling */
+.bareacts-container {
+  display: flex;
+  margin-left: 0; /* Ensure no left margin */
+  padding-left: 0; 
+}
+
+/* Main content styling */
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-left: 0; /* Ensure no left margin */
+}
+
+/* Mobile responsiveness adjustments */
+@media (max-width: 768px) {
+  .main-content {
+      padding: 20px 10px; /* Keep padding consistent */
+  }
+}
+
+/* Style for the All Laws Section */
+.all-laws {
+  width: 100%; /* Full width, no left whitespace */
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9; /* Light background */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.all-laws h3 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: #333;
+  text-align: center;
+  border-bottom: 2px solid #4A90E2; /* Add a nice blue underline */
+  padding-bottom: 10px;
+}
+
+.law-item div {
+  margin-bottom: 20px;
+  padding: 15px;
+  border-left: 4px solid #4A90E2; /* Add a blue side border */
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+}
+
+.all-laws div:hover {
+  transform: translateY(-5px); /* Add hover lift effect */
+}
+
+.all-laws h4 {
+  font-size: 1.5rem;
+  color: #4A90E2;
+  margin-bottom: 8px;
+}
+
+.all-laws p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.all-laws p strong {
+  color: #000;
+}
+/* Container styling for search results */
+.search-results {
+  width: 100%; /* Full width, no left whitespace */
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9; /* Light background */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Search results header styling */
+.search-results h3 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: #333;
+  text-align: center;
+  border-bottom: 2px solid #4A90E2; /* Add a nice blue underline */
+  padding-bottom: 10px;
+}
+
+/* Individual law item styling */
+.search-results div {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+}
+/* Hover effect for law item */
+.search-results div:hover {
+  transform: translateY(-5px); /* Add hover lift effect */
+}
+
+/* Law title styling */
+.search-results h4 {
+  font-size: 1.5rem;
+  color: #4A90E2;
+  margin-bottom: 8px;
+}
+
+/* Law description text styling */
+.search-results p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Styling for strong text in descriptions */
+.search-results p strong {
+  color: #000;
+}

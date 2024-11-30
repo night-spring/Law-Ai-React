@@ -1,0 +1,95 @@
+.sidebar {
+  background-color: #002D62; /* Dark blue background */
+  color: #FFFFFF; /* White text for contrast */
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+}
+
+.sidebar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-logo h1 {
+  font-size: 1.25rem;
+  margin-right: 0.5rem;
+}
+
+.sidebar-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.sidebar-link {
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 0.5rem;
+  transition: color 0.2s;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+  color: #FFD700; /* Highlight color on hover and active links */
+  font-weight: bold;
+}
+
+.sidebar-user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  border: 2px solid #FFD700;
+}
+
+.user-details .user-name {
+  font-size: 0.875rem;
+}
+
+.user-details .user-badge {
+  font-size: 0.75rem;
+  color: #B0B0B0;
+}
+/* Sidebar CSS for mobile responsiveness */
+.sidebar-content {
+  transition: all 0.3s ease;
+}
+
+/* Hide sidebar on small screens */
+@media (max-width: 768px) {
+  .sidebar-content {
+    display: none;
+  }
+
+  .sidebar-content.block {
+    display: block;
+  }
+
+  /* For the hamburger menu */
+  .sidebar-logo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Navigation links should be vertically stacked on smaller screens */
+  .sidebar-links {
+    flex-direction: column;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .sidebar-link {
+    margin-top: 10px;
+  }
+}

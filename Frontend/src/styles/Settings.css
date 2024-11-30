@@ -1,0 +1,138 @@
+/* Settings.css */
+.settings-container {
+    display: flex;
+    background-color: #1e1e1e;
+    height: 100vh;
+    margin-top: 80px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    background-color: #1e1e1e;
+    padding: 40px;
+    transition: background-color 0.3s ease;
+    position: relative; /* For absolute positioning of toggle */
+  }
+  
+  .theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    transition: transform 0.3s ease;
+  }
+  
+  .theme-toggle:hover {
+    transform: scale(1.1);
+  }
+  
+  .settings-title {
+    font-size: 2rem;
+    margin: 20px 0;
+    text-align: center;
+  }
+  
+  .settings-description {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #666;
+  }
+  
+  .setting-item {
+    margin: 20px 0;
+    transition: transform 0.3s ease;
+  }
+  
+  .setting-item:hover {
+    transform: scale(1.02);
+  }
+  
+  .setting-label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+  
+  .setting-checkbox {
+    margin-right: 10px;
+  }
+  
+  .setting-select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    background-color: #f4f4f4; /* Light background for light mode */
+    color: #1e1e1e; /* Text color for light mode */
+  }
+  
+  .setting-select:hover {
+    border-color: #007bff; /* Exciting border color on hover */
+  }
+  
+  /* Dark mode styles */
+  .settings-container.dark {
+    background-color: #2c2c2c;
+    color: #f4f4f4;
+  }
+  
+  .settings-title.dark,
+  .settings-description.dark {
+    color: #f4f4f4;
+  }
+  
+  .setting-select.dark {
+    background-color: #1e1e1e; /* Dark background for select box */
+    color: #f4f4f4; /* Text color for select box */
+    border: 1px solid #666; /* Border color for select box */
+  }
+  
+  .setting-select.dark:hover {
+    border-color: #007bff; /* Border color on hover in dark mode */
+  }
+  
+  /* Light mode styles */
+  .settings-container.light {
+    background-color: #ffffff;
+    color: #333;
+  }
+  
+  .settings-title.light,
+  .settings-description.light {
+    color: #333;
+  }
+  
+  .setting-select.light {
+    background-color: #f4f4f4; /* Light background for select box */
+    color: #333; /* Text color for select box */
+    border: 1px solid #ccc; /* Border color for select box */
+  }
+  
+  .setting-select.light:hover {
+    border-color: #007bff; /* Border color on hover in light mode */
+  }
+  /* Hide Sidebar on mobile */
+.sidebar {
+  display: block; /* Default display for desktop */
+}
+
+.menu-bar {
+  display: none; /* Default display for mobile */
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none; /* Hide Sidebar on mobile */
+  }
+
+  .menu-bar {
+    display: block; /* Show MenuBar on mobile */
+  }
+}

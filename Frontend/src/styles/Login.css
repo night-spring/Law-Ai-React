@@ -1,0 +1,253 @@
+/* Global reset */
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+  }
+  
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    
+      margin: 0;
+      padding: 0;
+    
+  }
+  .main-content {
+   flex-grow: 1;
+   padding: 0 40px; /* Only left and right padding */
+   transition: background-color 0.3s ease;
+   position: relative;
+  }
+  
+  /* Navbar Styling */
+  .navbar {
+   margin: 0;
+   padding: 0;
+  }
+  
+  /* Other styles */
+  .login-title {
+   font-size: 2rem;
+   margin: 0;
+  padding: 0;
+   text-align: center;
+  }
+  
+  /* Rest of your existing styles */
+  
+.login-form {
+    width: 100%;
+    max-width: 400px;
+    background: #fff; /* Default background */
+    border-radius: 8px;
+    margin: 20px auto; /* Centers the element horizontally */
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
+}
+  .login-form.dark {
+    background: #333; /* Dark mode background */
+    color: #fff; /* Dark mode text */
+  }
+  
+  .login-form-item {
+    margin-bottom: 15px;
+  }
+  
+  .login-form-label {
+    margin-bottom: 5px;
+  }
+  
+  .login-form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+  }
+  
+  .login-form-input.dark {
+    background: #444; /* Dark mode input */
+    border: 1px solid #555; /* Dark mode border */
+    color: #fff; /* Dark mode text */
+  }
+  
+  .login-form-input:focus {
+    border-color: #007bff; /* Focused border color */
+  }
+  
+  .login-btn {
+    width: 100%;
+    padding: 10px;
+    background: #007bff; /* Button background */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .login-btn:hover {
+    background: #0056b3; /* Button hover */
+  }
+  .login-toggle-text {
+    margin-top: 15px;
+    margin-left: 50px; /* Keep left margin */
+    display: block; /* Ensure it's treated as a block for proper alignment */
+    text-align: center;
+}
+
+  
+  .login-toggle-link {
+    color: #007bff;
+    cursor: pointer;
+  }
+  .theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    transition: transform 0.3s ease;
+  }
+  
+  .theme-toggle:hover {
+    transform: scale(1.1);
+  }
+  .main-content {
+    flex-grow: 1;
+    padding: 40px;
+    transition: background-color 0.3s ease;
+    position: relative; /* For absolute positioning of toggle */
+  }
+  * Styling for the login title *
+.login-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
+/* Logout button styling */
+.logout-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  justify-content: center;
+  justify-items: center;
+  margin-left: 45%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logout-btn:hover {
+    background-color: var(--primary-color-hover);
+    transform: translateY(-2px);
+}
+
+/* Optional theme-related styles */
+.logout-btn.dark {
+    background-color: #444;
+}
+
+.logout-btn.light {
+    background-color: #007BFF;
+}
+
+.logout-btn.dark:hover {
+    background-color: #555;
+}
+
+.logout-btn.light:hover {
+    background-color: #0056b3;
+}
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column; /* Stack sidebar and content */
+  }
+
+  .login-main-content {
+    padding: 20px; /* Reduced padding for smaller screens */
+  }
+
+  .login-title {
+    font-size: 1.5rem; /* Smaller title for mobile */
+  }
+
+  .login-form {
+    max-width: 90%; /* Allow form to take more width on mobile */
+    padding: 15px; /* Reduced padding */
+  }
+
+  .login-form-item {
+    margin-bottom: 10px; /* Reduced spacing */
+  }
+
+  .login-btn {
+    padding: 12px; /* Slightly larger button padding */
+    font-size: 14px; /* Smaller font size */
+  }
+
+  .logout-btn {
+    padding: 8px 16px; /* Adjust padding for logout button */
+    font-size: 14px; /* Smaller font size */
+  }
+
+  .login-toggle-text {
+    margin-left: 0; /* Remove left margin on mobile */
+  }
+}
+/* Hide Sidebar on mobile */
+.sidebar {
+  display: block; /* Default display for desktop */
+}
+
+.menu-bar {
+  display: none; /* Default display for mobile */
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none; /* Hide Sidebar on mobile */
+  }
+
+  .menu-bar {
+    display: block; /* Show MenuBar on mobile */
+  }
+}
+.user-details {
+  margin: 20px 0;
+  background-color: var(--background-secondary); /* Adjust based on theme */
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-details p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.logout-btn {
+  background-color: red;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.logout-btn:hover {
+  background-color: darkred;
+}

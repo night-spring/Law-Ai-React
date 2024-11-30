@@ -1,0 +1,65 @@
+/* Container for the menu bar */
+.menu-bar-container {
+    position: relative;
+}
+
+/* Icon for opening the menu */
+.menu-icon {
+    cursor: pointer;
+    font-size: 24px; /* Size of the menu icon */
+    padding: 10px; /* Padding around the icon */
+}
+
+/* Styles for the menu options */
+.menu-options {
+    position: absolute; /* Position relative to the menu bar container */
+    top: 50px; /* Adjust based on your layout */
+    left: 0; /* Aligns the menu options to the left */
+    background-color: var(--menu-background); /* Ensure this variable has an opaque value */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Padding inside the menu */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Box shadow for depth */
+    z-index: 1000; /* Ensures it appears above other elements */
+}
+
+/* Styles for the list inside the menu options */
+.menu-options ul {
+    list-style: none; /* Remove default list styles */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+}
+
+/* Styles for each list item in the menu */
+.menu-options ul li {
+    margin-bottom: 15px; /* Spacing between items */
+}
+
+/* Styles for the links inside the list items */
+.menu-options ul li a {
+    text-decoration: none; /* Remove underline from links */
+    color: var(--text-color); /* Ensure this variable has a good contrast */
+    font-size: 16px; /* Default font size */
+    transition: color 0.3s ease; /* Smooth transition for color changes */
+}
+
+/* Hover effect for links */
+.menu-options ul li a:hover {
+    color: var(--hover-color); /* Define a hover color for links */
+}
+
+/* Styles for active links */
+.menu-options ul li a.active {
+    font-weight: bold; /* Bold text for active link */
+    color: var(--active-color); /* Color for active link */
+}
+
+/* Mobile responsiveness adjustments */
+@media (max-width: 768px) {
+    .menu-options {
+        padding: 15px; /* Adjust padding for smaller screens */
+    }
+
+    .menu-options ul li a {
+        font-size: 14px; /* Slightly smaller font size for readability on smaller screens */
+    }
+}

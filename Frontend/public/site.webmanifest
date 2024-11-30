@@ -1,0 +1,23 @@
+{
+    "name": "LawAI Mobile App",
+    "short_name": "LawAI",
+    "icons": [
+        {
+            "src": "/favicon.ico",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/favicon.ico",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "start_url": "/",
+    "scope": "/",
+    "description": "LawAI helps provide legal information and landmark judgments.",
+    "lang": "en-US"
+}
