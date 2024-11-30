@@ -13,7 +13,6 @@ import Team from './pages/Team';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import Accessibility from './pages/Accessibility';
 import TermsAndConditions from './pages/TermsAndConditions';
-import Test from './pages/test'
 function App() {
   return (
     <ThemeProvider>
@@ -32,7 +31,6 @@ function App() {
             <Route path="/privacypolicy" element={<PrivacyPolicy />} />
             <Route path="/accessibility" element={<Accessibility />} />
             <Route path="/terms" element={<TermsAndConditions />} />
-            <Route path="/test" element={<Test />} />
             {/* Add a catch-all route for 404 handling */}
             <Route path="*" element={<div>404 Not Found</div>} />
           </Routes>
