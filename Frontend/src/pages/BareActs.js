@@ -69,7 +69,7 @@ const BareActs = () => {
       let response;
   
       if (searchQuery || selectedActType) {
-        // Use POST if searchQuery or selectedActType are provided
+        // Use POST if searchQuery or selectedActType are provided 
         response = await axios.post("http://127.0.0.1:8000/search/", {
           query: searchQuery, // Send `searchQuery` as `query`
           act: selectedActType, // Send `selectedActType` as `act`
