@@ -66,13 +66,19 @@ const BareActs = () => {
     setError(null);
   
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/search/", // Endpoint
-        {
+      let response;
+  
+      if (searchQuery || selectedActType) {
+        // Use POST if searchQuery or selectedActType are provided
+        response = await axios.post("http://127.0.0.1:8000/search/", {
           query: searchQuery, // Send `searchQuery` as `query`
           act: selectedActType, // Send `selectedActType` as `act`
-        }
-      );
+        });
+      } else {
+        // Use GET if no specific query or act type is provided
+        response = await axios.get("http://127.0.0.1:8000/search/");
+      }
+  
       setSearchResults(response.data);
     } catch (err) {
       setError("An error occurred while fetching results.");
@@ -81,6 +87,7 @@ const BareActs = () => {
       setLoading(false);
     }
   };
+  
   
   // Updated filtering logic
   const filteredLaws = searchQuery
