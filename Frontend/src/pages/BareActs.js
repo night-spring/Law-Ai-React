@@ -26,7 +26,7 @@ const BareActs = () => {
     const fetchLaws = async () => {
       try {
         const response = await axios.get(
-          "https://chatbot-for-fir-backend.vercel.app/api/laws/acts"
+          "http://127.0.0.1:8000/database/"
         );
         setLaws(response.data);
       } catch (err) {
