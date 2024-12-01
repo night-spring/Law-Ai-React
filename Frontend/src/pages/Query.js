@@ -121,7 +121,7 @@ Ensure the FIR is signed by the complainant at the end.
 This comprehensive approach ensures a legally sound and complete FIR, maximizing the chances of successful prosecution. The investigating officer should carefully consider the evidence and apply the relevant sections accordingly. Remember, this is a guide, and the specific charges will depend on the specific facts of the case as they are investigated and revealed."`;
 
     try {
-      const response = await fetch('https://sih-backend-nine.vercel.app/ai/', {
+      const response = await fetch('http://127.0.0.1:8000/ai/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
