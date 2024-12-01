@@ -24,14 +24,17 @@ const BareActs = () => {
 
   useEffect(() => {
     const fetchLaws = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(
           "https://sih-backend-seven.vercel.app/database/"
         );
-        setLaws(response.data);
+        setLaws(response.data.data); // Access the `data` array from the response
       } catch (err) {
         console.error("Error fetching laws:", err);
         setError("Failed to fetch laws data.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -89,17 +92,7 @@ const BareActs = () => {
   };
   
   
-  // Updated filtering logic
-  const filteredLaws = searchQuery
-    ? laws.filter(
-        (law) =>
-          (selectedActType ? law.actType === selectedActType : true) &&
-          (law.section.includes(searchQuery) ||
-            law.title.toLowerCase().includes(searchQuery.toLowerCase()))
-      )
-    : selectedActType
-    ? laws.filter((law) => law.actType === selectedActType) // Filter only by actType if search query is empty
-    : laws;
+ 
 
   return (
     <div className="bareacts-container min-h-screen flex flex-col">
@@ -172,36 +165,44 @@ const BareActs = () => {
 
 
             <div className="all-laws bg-gray-50 p-8 rounded-lg shadow-md border border-gray-200">
-  <h3 className="text-3xl font-semibold text-blue-900 mb-6">
-    {searchQuery
-      ? `Search Results (${filteredLaws.length})`
-      : "Bare Acts"}
-  </h3>
-  {filteredLaws.length > 0 ? (
+  <h3 className="text-3xl font-semibold text-blue-900 mb-6">Bare Acts</h3>
+  {loading ? (
+    <p className="text-gray-500 italic mt-4">Loading...</p>
+  ) : error ? (
+    <p className="text-red-500 italic mt-4">{error}</p>
+  ) : laws.length > 0 ? (
     <div className="space-y-6">
-      {filteredLaws.map((law) => (
+      {laws.map((law) => (
         <div
-          key={law.section}
+          key={law.id}
           className="law-item p-6 bg-white border border-gray-300 rounded-xl shadow-md hover:shadow-xl transition-transform duration-300 transform hover:scale-105 border-l-[4px] border-l-blue-500"
-
-
         >
-          <h4 className="law-title text-2xl font-semibold text-blue-800 mb-2">
-            {law.actType} - {law.section}
+          <h4 className="law-title text-2xl font-semibold text-blue-800">
+            Section {law.section_id}
           </h4>
-          <p className="text-lg font-medium text-gray-700 mb-2">
-            {law.title}
-          </p>
-          <p className="text-gray-600">{law.description}</p>
+          <p className="text-lg font-bold text-black mt-2">{law.section_title}</p>
+          <button
+            onClick={() =>
+              setLaws((prevLaws) =>
+                prevLaws.map((l) =>
+                  l.id === law.id ? { ...l, showDescription: !l.showDescription } : l
+                )
+              )
+            }
+            className="text-blue-600 font-medium hover:underline focus:outline-none mt-2"
+          >
+            {law.showDescription ? "Hide Details" : "Show Details"}
+          </button>
+          {law.showDescription && <p className="text-gray-600 mt-4">{law.description}</p>}
         </div>
       ))}
     </div>
   ) : (
-    <p className="text-gray-500 italic mt-4">
-      No laws found. Try a different search query.
-    </p>
+    <p className="text-gray-500 italic mt-4">No laws found. Try a different search query.</p>
   )}
 </div>
+
+
 
 
 
