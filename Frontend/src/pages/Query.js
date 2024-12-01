@@ -26,7 +26,7 @@ const Query = () => {
     return recog;
   }, [SpeechRecognition]);
 
-  // Check if the screen is mobile on initial load and on window resize
+  // Check if the screen is mobile on initial load and on window resize 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
