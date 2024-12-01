@@ -26,7 +26,7 @@ const BareActs = () => {
     const fetchLaws = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/database/"
+          "https://sih-backend-seven.vercel.app/database/"
         );
         setLaws(response.data);
       } catch (err) {
@@ -69,14 +69,14 @@ const BareActs = () => {
       let response;
   
       if (searchQuery || selectedActType) {
-        // Use POST if searchQuery or selectedActType are provided 
-        response = await axios.post("http://127.0.0.1:8000/search/", {
+        // Use POST if searchQuery or selectedActType are provided
+        response = await axios.post("https://sih-backend-seven.vercel.app/search/", {
           query: searchQuery, // Send `searchQuery` as `query`
           act: selectedActType, // Send `selectedActType` as `act`
         });
       } else {
         // Use GET if no specific query or act type is provided
-        response = await axios.get("http://127.0.0.1:8000/search/");
+        response = await axios.get("https://sih-backend-seven.vercel.app/search/");
       }
   
       setSearchResults(response.data);
