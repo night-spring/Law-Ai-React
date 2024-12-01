@@ -64,12 +64,13 @@ const BareActs = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+  
     try {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/search/",
+      const response = await axios.post(
+        "http://127.0.0.1:8000/search/", // Endpoint
         {
-          params: { keyword: searchQuery, actType: selectedActType },
+          query: searchQuery, // Send `searchQuery` as `query`
+          act: selectedActType, // Send `selectedActType` as `act`
         }
       );
       setSearchResults(response.data);
@@ -80,7 +81,7 @@ const BareActs = () => {
       setLoading(false);
     }
   };
-
+  
   // Updated filtering logic
   const filteredLaws = searchQuery
     ? laws.filter(
@@ -139,21 +140,20 @@ const BareActs = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="bareacts-search-input w-full sm:w-96 p-3 text-lg rounded-lg border-2 bg-white text-gray-800 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 />
-                <select
+               <select
                   value={selectedActType}
                   onChange={(e) => setSelectedActType(e.target.value)}
                   className="bareacts-select-input w-full sm:w-96 p-3 text-lg rounded-lg border-2 bg-white text-gray-800 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 >
                   <option value="">Select Act Type</option>
-                  {laws
-                    .map((law) => law.actType)
-                    .filter((value, index, self) => self.indexOf(value) === index)
-                    .map((actType) => (
-                      <option key={actType} value={actType}>
-                        {actType}
-                      </option>
-                    ))}
+                  {["bns", "ipc", "crpc", "iea", "cpc", "mva"].map((actType) => (
+                    <option key={actType} value={actType}>
+                      {actType}
+                    </option>
+                  ))}
                 </select>
+
+
                 <button
                   type="submit"
                   className="bareacts-search-btn p-4 rounded-lg bg-blue-600 text-white font-medium shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out"
