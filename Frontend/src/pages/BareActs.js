@@ -67,7 +67,7 @@ const BareActs = () => {
 
     try {
       const response = await axios.get(
-        "https://chatbot-for-fir-backend.vercel.app/api/laws/search",
+        "http://127.0.0.1:8000/search/",
         {
           params: { keyword: searchQuery, actType: selectedActType },
         }
