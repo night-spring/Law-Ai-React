@@ -90,35 +90,6 @@ const Query = () => {
     setIsLoading(true);
     setError('');
 
-    const fullQuery = `${query}. You are an AI assistant with in-depth expertise in the Indian Constitution, criminal law, and all relevant acts, sections, and legal provisions. Your role is to support law enforcement officers in the process of filing a First Information Report (FIR) by identifying and listing all applicable laws, including relevant acts, sections, and provisions. For each act or section, provide a concise yet comprehensive explanation of its significance, its direct relevance to the case, and how it should be applied in the context of the incident. Ensure that no pertinent legal provision is overlooked, and that the officer is equipped with a thorough understanding of the laws involved, enabling them to file a complete and legally sound FIR.
-After listing alll the acts, dont give any disclaimers. Just provide the below given text. 
-
-
-"The FIR should meticulously detail:
-
-1. Personal Details:
-Include the complainant’s (informant’s) full name, address, and contact details.
-
-2. Date, Time, and Location:
-Mention the exact date, time, and location where the crime or incident occurred.
-
-3. Nature of the Offense:
-Clearly state the nature of the crime or offense (e.g., theft, assault, fraud) and the specific details of the incident.
-
-4. Details of the Incident:
-Provide a detailed account of what happened. Include facts such as how the crime was committed, by whom, and any supporting circumstances.
-
-5. Witness Information:
-Mention the names and contact information of any witnesses, if available, and what they saw or heard.
-
-6. Complaint or Allegation:
-The complainant should clearly describe the incident as an allegation, and not make defamatory or baseless claims.
-
-7. Signature:
-Ensure the FIR is signed by the complainant at the end.
-
-
-This comprehensive approach ensures a legally sound and complete FIR, maximizing the chances of successful prosecution. The investigating officer should carefully consider the evidence and apply the relevant sections accordingly. Remember, this is a guide, and the specific charges will depend on the specific facts of the case as they are investigated and revealed."`;
 
     try {
       const response = await fetch('http://127.0.0.1:8000/ai/', {
@@ -126,7 +97,7 @@ This comprehensive approach ensures a legally sound and complete FIR, maximizing
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: fullQuery }),
+        body: JSON.stringify({ query: query }),
       });
 
       const data = await response.json();
