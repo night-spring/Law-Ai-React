@@ -7,7 +7,7 @@ import Footer from "../components/Footer";
 
 const BareActs = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [laws, setLaws] = useState([]);
@@ -16,7 +16,8 @@ const BareActs = () => {
   const [pdfs, setPdfs] = useState([]);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [pdfError, setPdfError] = useState(null);
-
+  const [pdfSearchQuery, setPdfSearchQuery] = useState("");
+  const [filteredPdfs, setFilteredPdfs] = useState([]);
   const [showDownloads, setShowDownloads] = useState(false);
   const [selectedActType, setSelectedActType] = useState("");
 
@@ -27,7 +28,7 @@ const BareActs = () => {
         const response = await axios.get(
           "https://sih-backend-seven.vercel.app/database/"
         );
-        setLaws(response.data.data); // Access the `data` array from the response
+        setLaws(response.data.data);
       } catch (err) {
         console.error("Error fetching laws:", err);
         setError("Failed to fetch laws data.");
@@ -67,20 +68,14 @@ const BareActs = () => {
     setError(null);
 
     try {
-      let response;
-
-      if (searchQuery || selectedActType) {
-        // Use POST if searchQuery or selectedActType are provided
-        response = await axios.post("https://sih-backend-seven.vercel.app/search/", {
-          query: searchQuery, // Send `searchQuery` as `query`
-          act: selectedActType, // Send `selectedActType` as `act`
-        });
-      } else {
-        // Use GET if no specific query or act type is provided
-        response = await axios.get("https://sih-backend-seven.vercel.app/search/");
-      }
-
-      setSearchResults(response.data);
+      const response = await axios.post(
+        "https://sih-backend-seven.vercel.app/search/",
+        {
+          query: searchQuery,
+          act: selectedActType,
+        }
+      );
+      setSearchResults(response.data.data);
     } catch (err) {
       setError("An error occurred while fetching results.");
       console.error(err);
@@ -100,6 +95,7 @@ const BareActs = () => {
           "https://sih-backend-seven.vercel.app/pdfs/"
         );
         setPdfs(response.data); // Assuming the response contains the list of PDFs with metadata
+        setFilteredPdfs(response.data); // Set initial filtered PDFs to all PDFs
       } catch (err) {
         setPdfError("Failed to fetch PDF data.");
         console.error("Error fetching PDFs:", err);
@@ -111,29 +107,46 @@ const BareActs = () => {
     fetchPdfs();
   }, []);
 
+  // Function to handle PDF search input change
+  const handlePdfSearchChange = (e) => {
+    const query = e.target.value;
+    setPdfSearchQuery(query);
+
+    // Filter PDFs based on the search query
+    if (query === "") {
+      setFilteredPdfs(pdfs); // Show all PDFs if no query
+    } else {
+      const filtered = pdfs.filter((pdf) =>
+        pdf.act_name.toLowerCase().includes(query.toLowerCase()) || // Match act name
+        pdf.description.toLowerCase().includes(query.toLowerCase()) // Match description
+      );
+      setFilteredPdfs(filtered);
+    }
+  };
+
   const handleDownloadPdf = async (pdfId) => {
     setPdfLoading(true); // Show loading indicator
     setPdfError(null); // Clear any previous errors
-  
+
     try {
       // Fetch the PDF file for download using the pdfId
       const response = await axios.get(
         `https://sih-backend-seven.vercel.app/pdfs/${pdfId}/download/`,
         { responseType: "blob" } // Ensure we get binary PDF data
       );
-  
+
       // Create a link to initiate the download
       const blob = new Blob([response.data], { type: "application/pdf" });
       const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
       link.href = url;
       link.setAttribute("download", `Document_${pdfId}.pdf`); // Set the filename to include pdfId
-  
+
       // Trigger the download by programmatically clicking the link
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link); // Clean up the DOM
-  
+
       // Optionally revoke the object URL
       URL.revokeObjectURL(url);
     } catch (err) {
@@ -143,8 +156,7 @@ const BareActs = () => {
       setPdfLoading(false); // Hide the loading indicator once download completes or fails
     }
   };
-  
-  
+
 
   return (
     <div className="bareacts-container min-h-screen flex flex-col">
@@ -198,11 +210,13 @@ const BareActs = () => {
                   className="bareacts-select-input w-full sm:w-96 p-3 text-lg rounded-lg border-2 bg-white text-gray-800 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 >
                   <option value="">Select Act Type</option>
-                  {["bns", "ipc", "crpc", "iea", "cpc", "mva"].map((actType) => (
-                    <option key={actType} value={actType}>
-                      {actType}
-                    </option>
-                  ))}
+                  {["bns", "ipc", "crpc", "iea", "cpc", "mva"].map(
+                    (actType) => (
+                      <option key={actType} value={actType}>
+                        {actType}
+                      </option>
+                    )
+                  )}
                 </select>
 
                 <button
@@ -214,84 +228,148 @@ const BareActs = () => {
               </form>
             </div>
 
-            <div className="all-laws bg-gray-50 p-8 rounded-lg shadow-md border border-gray-200">
-              <h3 className="text-3xl font-semibold text-blue-900 mb-6">Bare Acts</h3>
-              {loading ? (
-                <p className="text-gray-500 italic mt-4">Loading...</p>
-              ) : error ? (
-                <p className="text-red-500 italic mt-4">{error}</p>
-              ) : laws.length > 0 ? (
-                <div className="space-y-6">
-                  {laws.map((law) => (
-                    <div
-                      key={law.id}
-                      className="law-item p-6 bg-white border border-gray-300 rounded-xl shadow-md hover:shadow-xl transition-transform duration-300 transform hover:scale-105 border-l-[4px] border-l-blue-500"
-                    >
-                      <h4 className="law-title text-2xl font-semibold text-blue-800">
-                        Section {law.section_id}
-                      </h4>
-                      <p className="text-lg font-bold text-black mt-2">{law.section_title}</p>
-                      <button
-                        onClick={() =>
-                          setLaws((prevLaws) =>
-                            prevLaws.map((l) =>
-                              l.id === law.id
-                                ? { ...l, showDescription: !l.showDescription }
-                                : l
-                            )
-                          )
-                        }
-                        className="text-blue-600 mt-2"
+            {searchQuery && selectedActType ? (
+              <div className="search-results bg-gray-50 p-8 rounded-lg shadow-md border border-gray-200">
+                <h3 className="text-3xl font-semibold text-blue-900 mb-6">
+                  Search Results
+                </h3>
+                {loading ? (
+                  <p className="text-gray-500 italic mt-4">Loading...</p>
+                ) : error ? (
+                  <p className="text-red-500 italic mt-4">{error}</p>
+                ) : searchResults && Object.keys(searchResults).length > 0 ? (
+                  <div className="p-4 bg-white border border-gray-300 rounded-xl shadow-md">
+                    <h4 className="text-2xl font-semibold text-blue-800">
+                      Section {searchResults.section}
+                    </h4>
+                    <p className="text-lg font-bold mt-2">
+                      {searchResults.title}
+                    </p>
+                    <p className="text-gray-600 mt-2">
+                      {searchResults.description}
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-gray-500 italic mt-4">
+                    No results found for your search.
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div className="all-laws bg-gray-50 p-8 rounded-lg shadow-md border border-gray-200">
+                <h3 className="text-3xl font-semibold text-blue-900 mb-6">
+                  Bare Acts
+                </h3>
+                {loading ? (
+                  <p className="text-gray-500 italic mt-4">Loading...</p>
+                ) : error ? (
+                  <p className="text-red-500 italic mt-4">{error}</p>
+                ) : laws.length > 0 ? (
+                  <div className="space-y-6">
+                    {laws.map((law) => (
+                      <div
+                        key={law.id}
+                        className="law-item p-6 bg-white border border-gray-300 rounded-xl shadow-md hover:shadow-xl transition-transform duration-300 transform hover:scale-105 border-l-[4px] border-l-blue-500"
                       >
-                        {law.showDescription ? "Hide" : "Show"} Description
-                      </button>
-                      {law.showDescription && (
-                        <p className="text-gray-600 mt-2">{law.description}</p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-gray-500 italic">No laws available</p>
-              )}
-            </div>
+                        <h4 className="law-title text-2xl font-semibold text-blue-800">
+                          Section {law.section_id}
+                        </h4>
+                        <p className="text-lg font-bold text-black mt-2">
+                          {law.section_title}
+                        </p>
+                        <button
+                          onClick={() =>
+                            setLaws((prevLaws) =>
+                              prevLaws.map((l) =>
+                                l.id === law.id
+                                  ? {
+                                      ...l,
+                                      showDescription: !l.showDescription,
+                                    }
+                                  : l
+                              )
+                            )
+                          }
+                          className="text-blue-600 hover:underline mt-4"
+                        >
+                          {law.showDescription
+                            ? "Hide Description"
+                            : "Show Description"}
+                        </button>
+                        {law.showDescription && (
+                          <p className="mt-4 text-gray-600">{law.description}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 italic mt-4">
+                    No bare acts available.
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         ) : (
           <div className="pdf-download-section">
-  <div className="flex justify-center items-center mb-6">
-    {pdfLoading ? (
-      <p>Loading PDFs...</p>
-    ) : pdfError ? (
-      <p className="text-red-500">{pdfError}</p>
-    ) : pdfs.length > 0 ? (
-      <div className="space-y-4">
-        {pdfs.map((pdf) => (
-          <div
-            key={pdf.id}
-            className="p-4 bg-white border border-gray-300 rounded-lg shadow-md flex justify-between items-center" // Added flex for alignment
-          >
-            <div className="pdf-info flex-1">
-              <h4 className="text-xl font-semibold text-blue-800">
-                {pdf.act_name} {/* Display the name of the PDF */}
-              </h4>
-              <p className="text-md text-gray-700">{pdf.description}</p> {/* Display the description */}
+              <div className="flex justify-center items-center mb-6">
+                {/* Search Box for PDFs */}
+                <div className="w-full sm:w-96">
+                  <input
+                    type="text"
+                    placeholder="Search PDFs"
+                    value={pdfSearchQuery}  // State to hold the search input value
+                    onChange={handlePdfSearchChange}  // Function to handle input changes
+                    className="w-full p-3 text-lg rounded-lg border-2 bg-white text-gray-800 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  />
+                </div>
+              </div>
+
+              {pdfLoading ? (
+                <p>Loading PDFs...</p>
+              ) : pdfError ? (
+                <p className="text-red-500">{pdfError}</p>
+              ) : (
+                <div className="space-y-4">
+                  {/* Filter PDFs based on search query */}
+                  {pdfs
+                    .filter((pdf) => {
+                      if (pdfSearchQuery === "") {
+                        return true;  // If search query is empty, show all PDFs
+                      }
+                      // If search query is not empty, filter by act_name or description
+                      return (
+                        pdf.act_name.toLowerCase().includes(pdfSearchQuery.toLowerCase()) ||
+                        pdf.description.toLowerCase().includes(pdfSearchQuery.toLowerCase())
+                      );
+                    })
+                    .map((pdf) => (
+                      <div
+                        key={pdf.id}
+                        className="p-4 bg-white border border-gray-300 rounded-lg shadow-md flex justify-between items-center"
+                      >
+                        <div className="pdf-info flex-1">
+                          <h4 className="text-xl font-semibold text-blue-800">
+                            {pdf.act_name} {/* Display the name of the PDF */}
+                          </h4>
+                          <p className="text-md text-gray-700">{pdf.description}</p> {/* Display the description */}
+                        </div>
+                        <div className="pdf-action ml-4">
+                          {/* Button to download the PDF */}
+                          <button
+                            onClick={() => handleDownloadPdf(pdf.id)} // Trigger PDF download
+                            className="p-2 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                          >
+                            Download PDF
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              )}
             </div>
-            <div className="pdf-action ml-4"> {/* Keeps the button on the right */}
-              <button
-                onClick={() => handleDownloadPdf(pdf.id)} // Trigger PDF download for clicked pdfId
-                className="p-2 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-              >
-                Download PDF
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    ) : (
-      <p>No PDFs available for download.</p>
-    )}
-  </div>
-</div>
+        
+
 
         )}
 
