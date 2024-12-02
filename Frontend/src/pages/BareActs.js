@@ -210,14 +210,13 @@ const BareActs = () => {
                   className="bareacts-select-input w-full sm:w-96 p-3 text-lg rounded-lg border-2 bg-white text-gray-800 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 >
                   <option value="">Select Act Type</option>
-                  {["bns", "ipc", "crpc", "iea", "cpc", "mva"].map(
-                    (actType) => (
-                      <option key={actType} value={actType}>
-                        {actType}
-                      </option>
-                    )
-                  )}
+                  {["bns", "ipc", "crpc", "iea", "cpc", "mva"].map((actType) => (
+                    <option key={actType} value={actType}>
+                      {actType.toUpperCase()} {/* Display as uppercase */}
+                    </option>
+                  ))}
                 </select>
+
 
                 <button
                   type="submit"
