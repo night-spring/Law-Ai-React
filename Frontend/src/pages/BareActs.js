@@ -27,7 +27,7 @@ const BareActs = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "https://sih-backend-seven.vercel.app/database/"
+          "https://sih-backend-seven.vercel.app/pdfs"
         );
         setLaws(response.data.data); // Access the `data` array from the response
       } catch (err) {
