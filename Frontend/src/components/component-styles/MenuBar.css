@@ -37,20 +37,21 @@
 /* Styles for the links inside the list items */
 .menu-options ul li a {
     text-decoration: none; /* Remove underline from links */
-    color: var(--text-color); /* Ensure this variable has a good contrast */
+    color: white; /* Ensure this variable has a good contrast */
     font-size: 16px; /* Default font size */
     transition: color 0.3s ease; /* Smooth transition for color changes */
 }
 
 /* Hover effect for links */
 .menu-options ul li a:hover {
-    color: var(--hover-color); /* Define a hover color for links */
+    color: white; 
+    font-weight: bolder ;/* Define a hover color for links */
 }
 
 /* Styles for active links */
 .menu-options ul li a.active {
     font-weight: bold; /* Bold text for active link */
-    color: var(--active-color); /* Color for active link */
+    color: rgb(255, 157, 0); /* Color for active link */
 }
 
 /* Mobile responsiveness adjustments */

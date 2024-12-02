@@ -13,21 +13,19 @@ const BareActs = () => {
   const [laws, setLaws] = useState([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [showButton, setShowButton] = useState(false);
+  const [pdfs, setPdfs] = useState([]);
+  const [pdfLoading, setPdfLoading] = useState(false);
+  const [pdfError, setPdfError] = useState(null);
+
   const [showDownloads, setShowDownloads] = useState(false);
   const [selectedActType, setSelectedActType] = useState("");
-
-  const dummyPDFs = [
-    { id: 1, title: "Bare Act 1", description: "Dummy PDF Description 1" },
-    { id: 2, title: "Bare Act 2", description: "Dummy PDF Description 2" },
-    { id: 3, title: "Bare Act 3", description: "Dummy PDF Description 3" },
-  ];
 
   useEffect(() => {
     const fetchLaws = async () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "https://sih-backend-seven.vercel.app/pdfs"
+          "https://sih-backend-seven.vercel.app/database/"
         );
         setLaws(response.data.data); // Access the `data` array from the response
       } catch (err) {
@@ -67,10 +65,10 @@ const BareActs = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-  
+
     try {
       let response;
-  
+
       if (searchQuery || selectedActType) {
         // Use POST if searchQuery or selectedActType are provided
         response = await axios.post("https://sih-backend-seven.vercel.app/search/", {
@@ -81,7 +79,7 @@ const BareActs = () => {
         // Use GET if no specific query or act type is provided
         response = await axios.get("https://sih-backend-seven.vercel.app/search/");
       }
-  
+
       setSearchResults(response.data);
     } catch (err) {
       setError("An error occurred while fetching results.");
@@ -90,9 +88,63 @@ const BareActs = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // Fetch PDF metadata
+    const fetchPdfs = async () => {
+      setPdfLoading(true);
+      setPdfError(null);
+
+      try {
+        const response = await axios.get(
+          "https://sih-backend-seven.vercel.app/pdfs/"
+        );
+        setPdfs(response.data); // Assuming the response contains the list of PDFs with metadata
+      } catch (err) {
+        setPdfError("Failed to fetch PDF data.");
+        console.error("Error fetching PDFs:", err);
+      } finally {
+        setPdfLoading(false);
+      }
+    };
+
+    fetchPdfs();
+  }, []);
+
+  const handleDownloadPdf = async (pdfId) => {
+    setPdfLoading(true); // Show loading indicator
+    setPdfError(null); // Clear any previous errors
+  
+    try {
+      // Fetch the PDF file for download using the pdfId
+      const response = await axios.get(
+        `https://sih-backend-seven.vercel.app/pdfs/${pdfId}/download/`,
+        { responseType: "blob" } // Ensure we get binary PDF data
+      );
+  
+      // Create a link to initiate the download
+      const blob = new Blob([response.data], { type: "application/pdf" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.href = url;
+      link.setAttribute("download", `Document_${pdfId}.pdf`); // Set the filename to include pdfId
+  
+      // Trigger the download by programmatically clicking the link
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link); // Clean up the DOM
+  
+      // Optionally revoke the object URL
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setPdfError("Failed to fetch PDF data.");
+      console.error("Error fetching PDF:", err);
+    } finally {
+      setPdfLoading(false); // Hide the loading indicator once download completes or fails
+    }
+  };
   
   
- 
 
   return (
     <div className="bareacts-container min-h-screen flex flex-col">
@@ -140,7 +192,7 @@ const BareActs = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="bareacts-search-input w-full sm:w-96 p-3 text-lg rounded-lg border-2 bg-white text-gray-800 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 />
-               <select
+                <select
                   value={selectedActType}
                   onChange={(e) => setSelectedActType(e.target.value)}
                   className="bareacts-select-input w-full sm:w-96 p-3 text-lg rounded-lg border-2 bg-white text-gray-800 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
@@ -153,7 +205,6 @@ const BareActs = () => {
                   ))}
                 </select>
 
-
                 <button
                   type="submit"
                   className="bareacts-search-btn p-4 rounded-lg bg-blue-600 text-white font-medium shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out"
@@ -163,85 +214,96 @@ const BareActs = () => {
               </form>
             </div>
 
-
             <div className="all-laws bg-gray-50 p-8 rounded-lg shadow-md border border-gray-200">
-  <h3 className="text-3xl font-semibold text-blue-900 mb-6">Bare Acts</h3>
-  {loading ? (
-    <p className="text-gray-500 italic mt-4">Loading...</p>
-  ) : error ? (
-    <p className="text-red-500 italic mt-4">{error}</p>
-  ) : laws.length > 0 ? (
-    <div className="space-y-6">
-      {laws.map((law) => (
-        <div
-          key={law.id}
-          className="law-item p-6 bg-white border border-gray-300 rounded-xl shadow-md hover:shadow-xl transition-transform duration-300 transform hover:scale-105 border-l-[4px] border-l-blue-500"
-        >
-          <h4 className="law-title text-2xl font-semibold text-blue-800">
-            Section {law.section_id}
-          </h4>
-          <p className="text-lg font-bold text-black mt-2">{law.section_title}</p>
-          <button
-            onClick={() =>
-              setLaws((prevLaws) =>
-                prevLaws.map((l) =>
-                  l.id === law.id ? { ...l, showDescription: !l.showDescription } : l
-                )
-              )
-            }
-            className="text-blue-600 font-medium hover:underline focus:outline-none mt-2"
-          >
-            {law.showDescription ? "Hide Details" : "Show Details"}
-          </button>
-          {law.showDescription && <p className="text-gray-600 mt-4">{law.description}</p>}
-        </div>
-      ))}
-    </div>
-  ) : (
-    <p className="text-gray-500 italic mt-4">No laws found. Try a different search query.</p>
-  )}
-</div>
-
-
-
-
-
-
+              <h3 className="text-3xl font-semibold text-blue-900 mb-6">Bare Acts</h3>
+              {loading ? (
+                <p className="text-gray-500 italic mt-4">Loading...</p>
+              ) : error ? (
+                <p className="text-red-500 italic mt-4">{error}</p>
+              ) : laws.length > 0 ? (
+                <div className="space-y-6">
+                  {laws.map((law) => (
+                    <div
+                      key={law.id}
+                      className="law-item p-6 bg-white border border-gray-300 rounded-xl shadow-md hover:shadow-xl transition-transform duration-300 transform hover:scale-105 border-l-[4px] border-l-blue-500"
+                    >
+                      <h4 className="law-title text-2xl font-semibold text-blue-800">
+                        Section {law.section_id}
+                      </h4>
+                      <p className="text-lg font-bold text-black mt-2">{law.section_title}</p>
+                      <button
+                        onClick={() =>
+                          setLaws((prevLaws) =>
+                            prevLaws.map((l) =>
+                              l.id === law.id
+                                ? { ...l, showDescription: !l.showDescription }
+                                : l
+                            )
+                          )
+                        }
+                        className="text-blue-600 mt-2"
+                      >
+                        {law.showDescription ? "Hide" : "Show"} Description
+                      </button>
+                      {law.showDescription && (
+                        <p className="text-gray-600 mt-2">{law.description}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500 italic">No laws available</p>
+              )}
+            </div>
           </div>
         ) : (
-          <div className="download-section bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 p-8 rounded-xl shadow-lg">
-          <h3 className="text-3xl font-semibold text-blue-900 text-center mb-8">
-            Download PDF Files
-          </h3>
-        
-          {dummyPDFs.map((pdf) => (
-            <div
-              key={pdf.id}
-              className="pdf-item flex items-center justify-between p-6 mb-6 border-2 border-gray-300 rounded-lg shadow-xl bg-white hover:shadow-2xl transition-shadow duration-300 ease-in-out"
-              style={{ height: "120px" }}
-            >
-              <div className="flex flex-col">
-                <h4 className="text-xl font-bold text-blue-900 mb-2">{pdf.title}</h4>
-                <p className="text-gray-600">{pdf.description}</p>
-              </div>
-              <button className="p-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105">
-                Download
+          <div className="pdf-download-section">
+  <div className="flex justify-center items-center mb-6">
+    {pdfLoading ? (
+      <p>Loading PDFs...</p>
+    ) : pdfError ? (
+      <p className="text-red-500">{pdfError}</p>
+    ) : pdfs.length > 0 ? (
+      <div className="space-y-4">
+        {pdfs.map((pdf) => (
+          <div
+            key={pdf.id}
+            className="p-4 bg-white border border-gray-300 rounded-lg shadow-md flex justify-between items-center" // Added flex for alignment
+          >
+            <div className="pdf-info flex-1">
+              <h4 className="text-xl font-semibold text-blue-800">
+                {pdf.act_name} {/* Display the name of the PDF */}
+              </h4>
+              <p className="text-md text-gray-700">{pdf.description}</p> {/* Display the description */}
+            </div>
+            <div className="pdf-action ml-4"> {/* Keeps the button on the right */}
+              <button
+                onClick={() => handleDownloadPdf(pdf.id)} // Trigger PDF download for clicked pdfId
+                className="p-2 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+              >
+                Download PDF
               </button>
             </div>
-          ))}
-        </div>
-        
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p>No PDFs available for download.</p>
+    )}
+  </div>
+</div>
+
+        )}
+
+        {showButton && (
+          <button
+            onClick={scrollToTop}
+            className="fixed bottom-8 right-8 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300"
+          >
+            <span className="material-icons text-lg">arrow_upward</span>
+          </button>
         )}
       </main>
-
-      {showButton && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-6 right-6 bg-blue-600 text-white w-12 h-12 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out"
-        >
-           <span className="material-icons text-lg">arrow_upward</span>
-        </button>
-      )}
 
       <Footer />
     </div>

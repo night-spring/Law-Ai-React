@@ -37,7 +37,7 @@ const MenuBar = () => {
         <span className="material-icons">menu</span>
       </div>
 
-      {isMenuOpen && (
+       {isMenuOpen && (
         <motion.nav
           className="menu-options"
           initial="hidden"
@@ -45,26 +45,37 @@ const MenuBar = () => {
           variants={menuVariants}
           transition={{ type: 'tween', stiffness: 300 }}
           style={{
-            backgroundColor: '#ffffff', // Fixed light mode background
-            borderRadius: '8px',
+            background: 'linear-gradient(to right, #3b82f6, #6366f1, #9333ea)', // Dark background, matching the Sidebar theme
+            borderRadius: '10px',
             padding: '20px',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.2)',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)', // Deeper shadow for better contrast
           }}
         >
-          <div className="menu-header">
-            <h1>LawAI</h1>
-            <span className="material-icons">gavel</span>
+          <div className="menu-header flex justify-between items-center mb-6">
+          <NavLink to="/" className="text-white text-2xl font-bold">
+        LawAI
+      </NavLink>
+            <span className="material-icons text-white text-3xl">gavel</span>
           </div>
-
+      
           {/* Display User info if logged in */}
           {isLoggedIn && (
-            <div className="user-info" style={{ textAlign: 'left', marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
-              <div className="profile-icon" style={{ marginBottom: '15px' }}>
-                <img 
+            <div
+              className="user-info flex flex-col items-start mb-6"
+              style={{
+                textAlign: 'left',
+              }}
+            >
+              <div className="profile-icon mb-4">
+                <img
                   src="https://www.pngall.com/wp-content/uploads/12/Avatar-PNG-Images.png" // Example random profile image
-                  alt="User Profile" 
-                  style={{ borderRadius: '50%', width: '80px', height: '80px', objectFit: 'cover' }} 
+                  alt="User Profile"
+                  className="rounded-full w-20 h-20 object-cover" // Updated to make the image slightly larger
                 />
+              </div>
+              <div className="user-details text-white">
+                <p className="text-lg font-semibold">{name}</p>
+                <p className="text-sm text-gray-300">Badge #: {badgeNumber}</p>
               </div>
             </div>
           )}

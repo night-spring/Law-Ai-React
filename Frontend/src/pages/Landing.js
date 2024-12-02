@@ -45,42 +45,43 @@ const Landing = () => {
     <div className="landing bg-gray-100 text-gray-900 font-sans">
       {/* Header Section */}
       <header className="bg-gradient-to-r from-blue-800 via-indigo-800 to-purple-800 text-white shadow-lg">
-        <div className="container mx-auto px-6 flex justify-between items-center py-4">
-          {/* Left Section: Logo and Title */}
-          <div className="flex items-center space-x-4">
-            <img
-              src={img1}
-              alt="Emblem of India"
-              className="h-14"
-            />
-            <div className="text-left">
-              <h1 className="text-xl md:text-2xl font-bold tracking-wide">
-                LawAI Portal
-              </h1>
-              <p className="text-sm text-gray-200">
-                Ministry of Law & Justice, Government of India
-              </p>
-            </div>
-          </div>
+  <div className="container mx-auto px-6 py-4 flex justify-between items-center flex-wrap">
+    {/* Left Section: Logo and Title */}
+    <div className="flex items-center space-x-4 flex-shrink-0">
+      <img
+        src={img1}
+        alt="Emblem of India"
+        className="h-14"
+      />
+      <div className="text-left">
+        <h1 className="text-lg sm:text-xl md:text-2xl font-bold tracking-wide">
+          LawAI Portal
+        </h1>
+        <p className="text-xs sm:text-sm text-gray-200">
+          Ministry of Law & Justice, Government of India
+        </p>
+      </div>
+    </div>
 
-          {/* Right Section: Buttons */}
-          <div className="flex items-center space-x-6">
-            <button
-              className="bg-white text-blue-800 px-4 py-2 rounded-lg text-sm font-semibold shadow-md hover:shadow-lg transform transition hover:scale-105"
-              onClick={handleDownload}
-              aria-label="Download resources"
-            >
-              Download Software
-            </button>
-            <button
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md hover:bg-blue-500 transform transition hover:scale-105"
-              onClick={() => window.open("https://india.gov.in", "_blank")}
-            >
-              Visit India.gov.in
-            </button>
-          </div>
-        </div>
-      </header>
+    {/* Right Section: Buttons */}
+    <div className="flex items-center space-x-4 mt-4 md:mt-0">
+      <button
+        className="bg-white text-blue-800 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg transform transition hover:scale-105"
+        onClick={handleDownload}
+        aria-label="Download resources"
+      >
+        Download Software
+      </button>
+      <button
+        className="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold shadow-md hover:bg-blue-500 transform transition hover:scale-105"
+        onClick={() => window.open("https://india.gov.in", "_blank")}
+      >
+        Visit India.gov.in
+      </button>
+    </div>
+  </div>
+</header>
+
 
 
 
@@ -138,32 +139,32 @@ const Landing = () => {
       <main className="container mx-auto px-4 py-8">
       <section
   id="home"
-  className="hero bg-gradient-to-br from-blue-600 to-purple-400 py-20 text-center shadow-2xl"
+  className="hero bg-gradient-to-br from-blue-600 to-purple-400 py-16 sm:py-20 text-center shadow-2xl"
 >
   {/* Main Heading */}
-  <h1 className="text-5xl font-extrabold text-white mb-6 tracking-wide leading-tight">
+  <h1 className="text-4xl sm:text-5xl font-extrabold text-white mb-6 tracking-wide leading-tight">
     Empowering Law Enforcement with AI
   </h1>
 
   {/* Subtext */}
-  <p className="text-gray-200 text-lg md:text-xl mb-10 leading-relaxed max-w-4xl mx-auto">
+  <p className="text-gray-200 text-base sm:text-lg md:text-xl mb-8 sm:mb-10 leading-relaxed max-w-4xl mx-auto">
     Revolutionize law enforcement with AI-powered tools. Streamline FIR filing, 
     access legal resources, and enhance operational efficiency with cutting-edge 
     technology.
   </p>
 
   {/* Call-to-Action Buttons */}
-  <div className="flex justify-center space-x-6">
-  <a
-  href="/home/query"
-  className="bg-yellow-400 text-blue-900 px-12 py-4 rounded-full text-lg font-semibold shadow-lg hover:bg-yellow-500 hover:shadow-xl transition-all duration-300"
->
-  Get Started
-</a>
+  <div className="flex justify-center space-x-4 sm:space-x-6">
+    <a
+      href="/home/query"
+      className="bg-yellow-400 text-blue-900 px-8 sm:px-10 py-3 sm:py-4 rounded-full text-sm sm:text-lg font-semibold shadow-lg hover:bg-yellow-500 hover:shadow-xl transition-all duration-300"
+    >
+      Get Started
+    </a>
 
     <a
       href="#features"
-      className="bg-white text-blue-800 px-10 py-4 rounded-full text-lg font-medium shadow-lg hover:bg-gray-100 hover:shadow-xl transition-all duration-300"
+      className="bg-white text-blue-800 px-8 sm:px-10 py-3 sm:py-4 rounded-full text-sm sm:text-lg font-medium shadow-lg hover:bg-gray-100 hover:shadow-xl transition-all duration-300"
     >
       Learn More
     </a>
@@ -250,7 +251,7 @@ const Landing = () => {
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <i className="fas fa-envelope text-blue-500"></i>
-                  <span className="text-gray-600">support@lawai.gov.in</span>
+                  <span className="text-gray-600">code.a.cola.01@gmail.com</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <i className="fas fa-phone text-blue-500"></i>
@@ -259,7 +260,7 @@ const Landing = () => {
                 <div className="flex items-center space-x-3">
                   <i className="fas fa-map-marker-alt text-blue-500"></i>
                   <span className="text-gray-600">
-                    Ministry of Law & Justice, New Delhi, India
+                    Ministry of Law & Justice, Madhya Pradesh, India
                   </span>
                 </div>
               </div>
