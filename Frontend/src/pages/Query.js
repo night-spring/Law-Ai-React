@@ -164,7 +164,7 @@ const Query = () => {
   };
 
   const handleSaveCase = async () => {
-    const endpoint = 'https://sih-backend-seven.vercel.app/case_save'; // Replace with your actual endpoint
+    const endpoint = 'https://sih-backend-seven.vercel.app/case_save/'; // Replace with your actual endpoint
     const dataToSend = {
       caseHeading: caseData.caseHeading,
       applicableArticles: caseData.applicableArticles,

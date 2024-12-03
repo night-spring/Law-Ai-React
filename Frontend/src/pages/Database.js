@@ -75,7 +75,7 @@ const Database = () => {
 
   // Effect to fetch data
   useEffect(() => {
-    fetch('https://sih-backend-seven.vercel.app/case_save/') // The URL for fetching data
+    fetch('https://sih-backend-seven.vercel.app/case_list/') // The URL for fetching data
       .then((response) => response.json())
       .then((data) => {
         // If data is fetched successfully, update the state
