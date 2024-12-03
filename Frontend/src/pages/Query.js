@@ -314,10 +314,15 @@ const Query = () => {
 
         {showPopup && (
           <div
-            className="popup-alert fixed top-20 right-5 bg-blue-600 text-white p-4 rounded-lg shadow-lg cursor-pointer"
+            className="popup-alert fixed top-20 right-5 bg-blue-50 border-l-4 border-blue-600 text-blue-800 p-6 rounded-lg shadow-xl cursor-pointer max-w-xs min-w-[250px] min-h-[80px]"
             onClick={toggleModal}
+            role="alert"
+            aria-live="assertive"
+            aria-labelledby="popup-alert-message"
           >
-            New case identified! Click to review.
+            <span id="popup-alert-message" className="font-semibold text-lg">
+              New case identified! Click to review.
+            </span>
           </div>
         )}
 
