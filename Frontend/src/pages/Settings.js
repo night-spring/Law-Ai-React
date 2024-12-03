@@ -50,7 +50,7 @@ const Settings = () => {
       {isMobile ? <MenuBar /> : <Sidebar />}
 
       <main className="main-content flex-grow p-8">
-        <h2 className="settings-title text-4xl font-semibold text-gray-800 mb-10 mt-14 text-center">
+        <h2 className="settings-title text-4xl font-semibold text-blue-900 text-center mb-8 mt-8">
           Settings
         </h2>
         <p className="settings-description text-lg text-gray-600 mb-12 text-center">
