@@ -186,7 +186,7 @@ const BareActs = () => {
                 : "bg-gray-200 text-gray-600 transform scale-100"
             }`}
           >
-            Download PDFs
+            Original Documents
           </button>
         </div>
 
@@ -209,10 +209,18 @@ const BareActs = () => {
                   onChange={(e) => setSelectedActType(e.target.value)}
                   className="bareacts-select-input w-full sm:w-96 p-3 text-lg rounded-lg border-2 bg-white text-gray-800 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 >
+                  
                   <option value="">Select Act Type</option>
-                  {["bns", "ipc", "crpc", "iea", "cpc", "mva"].map((actType) => (
-                    <option key={actType} value={actType}>
-                      {actType.toUpperCase()} {/* Display as uppercase */}
+                  {[
+                    { value: "bns", label: "Bharatiya Nyaya Sanhita" },
+                    { value: "ipc", label: "Indian Penal Code" },
+                    { value: "crpc", label: "Code of Criminal Procedure" },
+                    { value: "iea", label: "Indian Evidence Act" },
+                    { value: "cpc", label: "Code of Civil Procedure" },
+                    { value: "mva", label: "Motor Vehicles Act" },
+                  ].map(({ value, label }) => (
+                    <option key={value} value={value}>
+                      {value.toUpperCase()} ({label})
                     </option>
                   ))}
                 </select>
