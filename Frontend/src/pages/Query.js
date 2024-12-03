@@ -167,12 +167,13 @@ const Query = () => {
     const endpoint = 'https://sih-backend-seven.vercel.app/case_save/'; // Replace with your actual endpoint
     const dataToSend = {
       caseHeading: caseData.caseHeading,
-      applicableArticles: caseData.applicableArticles,
+      applicableArticle: caseData.applicableArticles,
       tags: caseData.tags,
       query: caseData.query,
-      status: caseData.status, // Send the status field
-      description: caseData.description // Send the description field
-    };
+      status: caseData.status,
+      description: caseData.description,
+  };
+  
 
     try {
       const response = await fetch(endpoint, {
