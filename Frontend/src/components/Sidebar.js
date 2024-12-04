@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import classNames from 'classnames'; // Add classnames for conditional styling
 import './component-styles/Sidebar.css';
 import img from '../images/MOE.png';
+import img1 from '../images/indian-emblem.png';
 
 const Sidebar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -33,12 +34,24 @@ const Sidebar = () => {
       <div className="sidebar-content bg-gradient-to-r from-blue-800 via-indigo-800 to-purple-800 text-white py-4 shadow-lg">
         {/* Logo and Title */}
         <div className="container mx-auto px-6 flex justify-between items-center py-2">
-          <div className="flex items-center space-x-4">
-            <span className="material-icons text-white text-3xl">gavel</span>
-            <h1 className="text-2xl font-bold tracking-wide">
-              <NavLink to="/">LawAI</NavLink>
-            </h1>
-          </div>
+       
+   
+    <div className="flex items-center space-x-4 flex-shrink-0">
+      <img
+        src={img1}
+        alt="Emblem of India"
+        className="h-14"
+      />
+      <div className="text-left">
+        <h1 className="text-lg sm:text-xl md:text-2xl font-bold tracking-wide">
+        <NavLink to="/">LawAI</NavLink>
+        </h1>
+        <p className="text-xs sm:text-sm text-gray-200">
+          Enforcing Law & Justice for Government of India
+        </p>
+      </div>
+    </div>
+             
 
           {/* Right Section */}
           <div className="flex items-center space-x-6">

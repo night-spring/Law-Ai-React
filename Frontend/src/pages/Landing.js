@@ -58,7 +58,7 @@ const Landing = () => {
           LawAI Portal
         </h1>
         <p className="text-xs sm:text-sm text-gray-200">
-          Ministry of Law & Justice, Government of India
+          Enforcing Law & Justice for Government of India
         </p>
       </div>
     </div>
@@ -175,29 +175,30 @@ const Landing = () => {
 
         {/* Image Section */}
         <section className="image-section py-16 bg-gradient-to-r from-gray-100 to-white mt-12">
-          <div className="container mx-auto text-center relative">
-            {/* Image */}
-            <div className="relative mb-8">
-              <img
-                src={img}
-                alt="Indian Government Building"
-                className="mx-auto rounded-xl shadow-2xl transform transition-transform hover:scale-105"
-                style={{ maxHeight: '500px', objectFit: 'cover', width: '100%' }}
-              />
-              {/* Overlay */}
-              <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40 rounded-xl">
-                <p className="text-white text-lg md:text-2xl font-semibold text-center px-6 py-4">
-                  An initiative representing trust and authority abiding by the constitution.
-                </p>
-              </div>
-            </div>
+  <div className="container mx-auto text-center relative px-4">
+    {/* Image */}
+    <div className="relative mb-12 hover:shadow-lg transition-shadow duration-300 ease-in-out">
+      <img
+        src={img}
+        alt="Indian Government Building"
+        className="mx-auto rounded-2xl shadow-2xl transform transition-transform hover:scale-105 hover:shadow-xl"
+        style={{ maxHeight: '500px', objectFit: 'cover', width: '100%', borderRadius: '1rem' }}
+      />
+      {/* Overlay */}
+      <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-50 rounded-xl">
+        <p className="text-white text-lg md:text-2xl font-semibold text-center px-6 py-4 md:px-12 md:py-6">
+          An initiative representing trust and authority abiding by the constitution.
+        </p>
+      </div>
+    </div>
 
-            {/* Additional Description */}
-            <p className="text-gray-700 text-md md:text-xl mx-auto max-w-6xl px-4">
-              This initiative is designed to bring the power of technology to law enforcement agencies, providing them with the resources they need to uphold justice and maintain public trust.
-            </p>
-          </div>
-        </section>
+    {/* Additional Description */}
+    <p className="text-gray-700 text-md md:text-xl mx-auto max-w-8xl px-4 md:px-8 mt-6">
+      This initiative is designed to bring the power of technology to law enforcement agencies, providing them with the resources they need to uphold justice and maintain public trust.
+    </p>
+  </div>
+</section>
+
 
         {/* Features Section */}
         <section id="features" className="features bg-gray-50 py-12 mt-10">

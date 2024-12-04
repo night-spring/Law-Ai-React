@@ -230,7 +230,7 @@ return (
             <i className="fas fa-info-circle"></i> {/* Info icon */}
           </button>
           <div className="absolute left-full ml-2 w-48 bg-gray-800 text-white text-sm rounded py-2 px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <p>This form will display you an Actual Dummy of the actual FIR for smooth actual Referencing Purpose</p> {/* Replace this with the actual info */}
+            <p>This form will display you a Dummy of the actual FIR for smooth actual Referencing Purpose</p> {/* Replace this with the actual info */}
           </div>
         </div>
       </div>
