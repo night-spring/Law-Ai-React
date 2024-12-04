@@ -84,7 +84,9 @@ const MenuBar = () => {
             <ul>
               <li><NavLink to="/home/query" activeClassName="active">AI Lawyer</NavLink></li>
               <li><NavLink to="/bareacts" activeClassName="active">Bare Acts</NavLink></li>
+
               <li><NavLink to="/home/database" activeClassName="active">Database</NavLink></li>
+              <li><NavLink to="/fir" activeClassName="active">FIR Builder</NavLink></li>
               <li>
                 {isLoggedIn ? (
                   <NavLink to="/home/login" activeClassName="active">Logged In</NavLink>

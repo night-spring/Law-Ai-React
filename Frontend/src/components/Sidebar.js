@@ -76,68 +76,135 @@ const Sidebar = () => {
       </div>
 
       {/* Sidebar Navigation */}
-      <nav className="bg-gradient-to-r from-blue-800 to-blue-600 text-white text-sm py-4 shadow-md">
-        <div className="container mx-auto px-6 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-10">
-          {/* AI Lawyer Link */}
-          <NavLink
-            to="/home/query"
-            className={classNames(
-              'text-lg font-medium hover:text-yellow-300 hover:underline underline-offset-4 transition duration-200',
-              { 'active': isLoggedIn }
-            )}
-          >
-            {language === 'English' ? 'AI Lawyer' : language === 'Hindi' ? 'एआई वकील' : language === 'Bengali' ? 'এআই আইনজীবী' : language === 'Tamil' ? 'ஏ.ஐ. வழக்குரைஞர்' : language === 'Telugu' ? 'ఏ.ఐ. న్యాయవాది' : language === 'Marathi' ? 'ए.आय. वकील' : 'AI Lawyer'}
-          </NavLink>
-          {/* Bare Acts Link */}
-          <NavLink
-            to="/bareacts"
-            className="text-lg font-medium hover:text-yellow-300 hover:underline underline-offset-4 transition duration-200"
-          >
-            {language === 'English' ? 'Bare Acts' : language === 'Hindi' ? 'नंगे कृत्य' : language === 'Bengali' ? 'নগ্ন আইন' : language === 'Tamil' ? 'மரபுவழி சட்டங்கள்' : language === 'Telugu' ? 'నగ్న చట్టాలు' : language === 'Marathi' ? 'नग्न कायदे' : 'Bare Acts'}
-          </NavLink>
-          {/* Database Link */}
-          <NavLink
-            to="/home/database"
-            className="text-lg font-medium hover:text-yellow-300 hover:underline underline-offset-4 transition duration-200"
-          >
-            {language === 'English' ? 'Database' : language === 'Hindi' ? 'डेटाबेस' : language === 'Bengali' ? 'ডাটাবেস' : language === 'Tamil' ? 'தரவுத்தளம்' : language === 'Telugu' ? 'డేటాబేస్' : language === 'Marathi' ? 'डेटाबेस' : 'Database'}
-          </NavLink>
-          {/* Settings Link */}
-          <NavLink
-            to="/home/settings"
-            className="text-lg font-medium hover:text-yellow-300 hover:underline underline-offset-4 transition duration-200"
-          >
-            {language === 'English' ? 'Settings' : language === 'Hindi' ? 'सेटिंग्स' : language === 'Bengali' ? 'সেটিংস' : language === 'Tamil' ? 'அமைப்புகள்' : language === 'Telugu' ? 'సెట్టింగ్‌లు' : language === 'Marathi' ? 'सेटिंग्ज' : 'Settings'}
-          </NavLink>
+      <nav className="sidebarrr-nav bg-gradient-to-r from-blue-800 to-blue-600 text-white text-sm py-4 shadow-md sticky top-0 z-50">
+  <div className="sidebar-contentcontainer mx-auto px-6 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-10">
+    
+    {/* AI Lawyer Link */}
+    <NavLink
+      to="/home/query"
+      className={({ isActive }) =>
+        classNames(
+          'text-lg font-medium hover:text-yellow-300 hover:underline underline-offset-4 transition duration-200',
+          { 'text-yellow-300': isActive }
+        )
+      }
+    >
+      {language === 'English' ? 'AI Lawyer' :
+        language === 'Hindi' ? 'एआई वकील' :
+        language === 'Bengali' ? 'এআই আইনজীবী' :
+        language === 'Tamil' ? 'ஏ.ஐ. வழக்குரைஞர்' :
+        language === 'Telugu' ? 'ఏ.ఐ. న్యాయవాది' :
+        language === 'Marathi' ? 'ए.आय. वकील' :
+        'AI Lawyer'}
+    </NavLink>
 
-          {/* Conditional Rendering of Avatar or Login */}
-          <NavLink
-            to="/home/login"
-            className={classNames(
-              'text-lg font-medium hover:text-yellow-300 hover:underline underline-offset-4 transition duration-200',
-              { 'active': isLoggedIn }
-            )}
-          >
-            {isLoggedIn ? (
-              <img
-                src="https://www.pngall.com/wp-content/uploads/12/Avatar-PNG-Images.png"
-                alt="User Profile"
-                className="user-avatar rounded-full w-8 h-8 object-cover"
-              />
-            ) : (
-              // Display Login text based on selected language
-              language === 'English' ? 'Login' :
-              language === 'Hindi' ? 'लॉगिन' :
-              language === 'Bengali' ? 'লগইন' :
-              language === 'Tamil' ? 'உள்நுழைவு' :
-              language === 'Telugu' ? 'లాగిన్' :
-              language === 'Marathi' ? 'लॉगिन' :
-              'Login' // Default to English if no match
-            )}
-          </NavLink>
+    {/* Bare Acts Link */}
+    <NavLink
+      to="/bareacts"
+      className={({ isActive }) =>
+        classNames(
+          'text-lg font-medium hover:text-yellow-300 hover:underline underline-offset-4 transition duration-200',
+          { 'text-yellow-300': isActive }
+        )
+      }
+    >
+      {language === 'English' ? 'Bare Acts' :
+        language === 'Hindi' ? 'नंगे कृत्य' :
+        language === 'Bengali' ? 'নগ্ন আইন' :
+        language === 'Tamil' ? 'மரபுவழி சட்டங்கள்' :
+        language === 'Telugu' ? 'నగ్న చట్టాలు' :
+        language === 'Marathi' ? 'नग्न कायदे' :
+        'Bare Acts'}
+    </NavLink>
 
-        </div>
-      </nav>
+    {/* Database Link */}
+    <NavLink
+      to="/home/database"
+      className={({ isActive }) =>
+        classNames(
+          'text-lg font-medium hover:text-yellow-300 hover:underline underline-offset-4 transition duration-200',
+          { 'text-yellow-300': isActive }
+        )
+      }
+    >
+      {language === 'English' ? 'Database' :
+        language === 'Hindi' ? 'डेटाबेस' :
+        language === 'Bengali' ? 'ডাটাবেস' :
+        language === 'Tamil' ? 'தரவுத்தளம்' :
+        language === 'Telugu' ? 'డేటాబేస్' :
+        language === 'Marathi' ? 'डेटाबेस' :
+        'Database'}
+    </NavLink>
+
+    {/* FIR Builder Link */}
+    <NavLink
+      to="/fir"
+      className={({ isActive }) =>
+        classNames(
+          'text-lg font-medium hover:text-yellow-300 hover:underline underline-offset-4 transition duration-200',
+          { 'text-yellow-300': isActive }
+        )
+      }
+    >
+      {language === 'English' ? 'FIR Builder' :
+        language === 'Hindi' ? 'एफआईआर निर्माता' :
+        language === 'Bengali' ? 'এফআইআর নির্মাতা' :
+        language === 'Tamil' ? 'ஃபைருக்கான கட்டுமானம்' :
+        language === 'Telugu' ? 'ఎఫ్ఐఆర్ నిర్మాణం' :
+        language === 'Marathi' ? 'एफआयआर बिल्डर' :
+        'FIR Builder'}
+    </NavLink>
+
+    {/* Settings Link */}
+    <NavLink
+      to="/home/settings"
+      className={({ isActive }) =>
+        classNames(
+          'text-lg font-medium hover:text-yellow-300 hover:underline underline-offset-4 transition duration-200',
+          { 'text-yellow-300': isActive }
+        )
+      }
+    >
+      {language === 'English' ? 'Settings' :
+        language === 'Hindi' ? 'सेटिंग्स' :
+        language === 'Bengali' ? 'সেটিংস' :
+        language === 'Tamil' ? 'அமைப்புகள்' :
+        language === 'Telugu' ? 'సెట్టింగ్‌లు' :
+        language === 'Marathi' ? 'सेटिंग्ज' :
+        'Settings'}
+    </NavLink>
+
+    {/* Conditional Rendering of Avatar or Login */}
+    <NavLink
+      to="/home/login"
+      className={({ isActive }) =>
+        classNames(
+          'text-lg font-medium hover:text-yellow-300 hover:underline underline-offset-4 transition duration-200',
+          { 'text-yellow-300': isActive }
+        )
+      }
+    >
+      {isLoggedIn ? (
+        <img
+          src="https://www.pngall.com/wp-content/uploads/12/Avatar-PNG-Images.png"
+          alt="User Profile"
+          className="user-avatar rounded-full w-8 h-8 object-cover"
+        />
+      ) : (
+        // Display Login text based on selected language
+        language === 'English' ? 'Login' :
+        language === 'Hindi' ? 'लॉगिन' :
+        language === 'Bengali' ? 'লগইন' :
+        language === 'Tamil' ? 'உள்நுழைவு' :
+        language === 'Telugu' ? 'లాగిన్' :
+        language === 'Marathi' ? 'लॉगिन' :
+        'Login' // Default to English if no match
+      )}
+    </NavLink>
+
+  </div>
+</nav>
+
     </motion.nav>
   );
 };
