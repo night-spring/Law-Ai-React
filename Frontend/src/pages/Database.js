@@ -184,7 +184,7 @@ const Database = () => {
                     <span className="font-semibold"><b>Applicable Articles:</b></span>{' '}
                     <br></br>
                     <span
-        className="block overflow-y-auto max-h-24"
+        className="block overflow-y-auto max-h-30"
         style={{ whiteSpace: 'normal' }}
       >
         {extractRelevantText(caseItem.applicableArticle)}
