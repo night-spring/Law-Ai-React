@@ -4,10 +4,12 @@ import MenuBar from '../components/MenuBar';
 import Footer from '../components/Footer';
 
 const Database = () => {
-  const [cases, setCases] = useState([]); // Ensure initial state is an empty array
+  const [cases, setCases] = useState([]);
   const [activeCase, setActiveCase] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [showScrollBtn, setShowScrollBtn] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedCaseData, setEditedCaseData] = useState({}); // To track edited case data
 
   // Fetch data from the endpoint
   useEffect(() => {
@@ -19,12 +21,11 @@ const Database = () => {
         return response.json();
       })
       .then((data) => {
-        console.log('API Response:', data); // Check the structure
-        setCases(data.cases || []); // Update state with cases array
+        setCases(data.cases || []);
       })
       .catch((error) => {
         console.error('Error fetching cases:', error);
-        setCases([]); // Fallback to empty array
+        setCases([]);
       });
   }, []);
 
@@ -64,46 +65,69 @@ const Database = () => {
   };
 
   const openCaseDetailsModal = (srNo) => {
-    setActiveCase(srNo);
+    const caseItem = cases.find((caseItem) => caseItem.id === srNo);
+    setActiveCase(caseItem);
+    setEditedCaseData(caseItem); // Pre-populate the form with case data
+    setIsEditing(false); // Default to view mode
   };
 
   const closeCaseDetailsModal = () => {
     setActiveCase(null);
+    setIsEditing(false); // Reset editing state
   };
+
+  const handleEditToggle = () => {
+    setIsEditing((prev) => !prev);
+  };
+
+  const handleSaveChanges = () => {
+    const updatedCases = cases.map((caseItem) =>
+      caseItem.id === activeCase.id
+        ? {
+            ...caseItem,
+            caseHeading: editedCaseData.caseHeading,
+            query: editedCaseData.query,
+            applicableArticle: editedCaseData.applicableArticle,
+            description: editedCaseData.description,
+            status: editedCaseData.status,
+          }
+        : caseItem
+    );
+
+    setCases(updatedCases);
+    setActiveCase(null); // Close modal after saving changes
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedCaseData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   const extractRelevantText = (text) => {
-    // Regular expression to match text between * or **, and "Section" pattern
     const regex = /(\*{1,2})(.*?)\1/g;
     let matches = [];
     let match;
 
-    // Find all matches and push them into the matches array
     while ((match = regex.exec(text)) !== null) {
-        matches.push(match[2]); // match[2] contains the text between asterisks
+      matches.push(match[2]);
     }
 
-    // Now format the extracted text based on whether it contains "Section"
     return matches.map((item, index) => {
-        // Check if the item contains a number and format accordingly
-        const containsNumber = /\d/.test(item); // Check for numbers
-
-        // Check if the item starts with "Section"
-        if (item.startsWith('Section')) {
-            return <strong key={index}>{item}</strong>; // If it's a section, emphasize it
-        } else {
-            // If it contains a number, display it on the next line
-            return containsNumber ? (
-                <div key={index}>
-                    <span>{item}</span>
-                    <br /> {/* Add a line break after items with numbers */}
-                </div>
-            ) : (
-                <span key={index}>{item}</span> // Otherwise, display it normally
-            );
-        }
+      const containsNumber = /\d/.test(item);
+      return containsNumber ? (
+        <div key={index}>
+          <span>{item}</span>
+          <br />
+        </div>
+      ) : (
+        <span key={index}>{item}</span>
+      );
     });
-};
+  };
 
-  
   return (
     <div className="bareacts-container min-h-screen flex flex-col">
       {isMobile ? <MenuBar /> : <Sidebar />}
@@ -133,16 +157,26 @@ const Database = () => {
                   </span>
                 </div>
                 <p className="text-md font-semibold text-darkBlue-800 mt-2">{caseItem.query}</p>
-               
                 <p className="text-sm text-red-600 mt-2">
                   <strong>Tags:</strong> {caseItem.tags}
                 </p>
-                <button
-                  onClick={() => openCaseDetailsModal(caseItem.id)}
-                  className="mt-4 text-blue-600 hover:underline font-semibold"
-                >
-                  Show Details
-                </button>
+                <div className="flex justify-between mt-4">
+                  <button
+                    onClick={() => openCaseDetailsModal(caseItem.id)}
+                    className="text-blue-600 hover:underline font-semibold"
+                  >
+                    Show Details
+                  </button>
+                  <button
+                    onClick={() => {
+                      openCaseDetailsModal(caseItem.id);
+                      setIsEditing(true); // Open in edit mode
+                    }}
+                    className="text-yellow-500 hover:underline font-semibold"
+                  >
+                    Edit
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -170,38 +204,93 @@ const Database = () => {
             >
               &times;
             </button>
-            {cases
-              .filter((caseItem) => caseItem.id === activeCase)
-              .map((caseItem) => (
-                <div key={caseItem.id} className="space-y-6">
-                  <h3 className="text-3xl font-semibold text-blue-900 border-b pb-2">
-                    {caseItem.caseHeading}
-                  </h3>
-                  <p className="text-lg font-medium text-black-500">
-                    <span className="font-semibold">Query:</span> {caseItem.query}
-                  </p>
-                  <p className="text-lg font-medium text-black-500">
-                    <span className="font-semibold"><b>Applicable Articles:</b></span>{' '}
-                    <br></br>
-                    <span
-        className="block overflow-y-auto max-h-30"
-        style={{ whiteSpace: 'normal' }}
-      >
-        {extractRelevantText(caseItem.applicableArticle)}
-      </span>
-                  </p>
-                  <p className="text-lg font-medium text-red-700">
-                    <span className="font-semibold">Tags:</span> {caseItem.tags}
-                  </p>
-                  <div
-                    className="case-description text-sm text-gray-800 mt-4 bg-gray-50 p-4 rounded-lg shadow-sm"
-                    style={{ maxHeight: '300px', overflowY: 'auto' }}
+            <div className="space-y-6">
+              <h3 className="text-3xl font-semibold text-blue-900 border-b pb-2">
+                {isEditing ? (
+                  <input
+                    name="caseHeading"
+                    type="text"
+                    value={editedCaseData.caseHeading || ''}
+                    onChange={handleInputChange}
+                    className="text-3xl font-semibold text-blue-900 w-full bg-transparent border-none"
+                  />
+                ) : (
+                  activeCase.caseHeading
+                )}
+              </h3>
+              <p className="text-lg font-medium text-black-500">
+                <span className="font-semibold">Query:</span>{' '}
+                {isEditing ? (
+                  <textarea
+                    name="query"
+                    value={editedCaseData.query || ''}
+                    onChange={handleInputChange}
+                    className="w-full p-2 mt-2 border rounded-md"
+                    rows="3"
+                  />
+                ) : (
+                  activeCase.query
+                )}
+              </p>
+              <div>
+                <span className="font-semibold">Applicable Articles:</span>
+                {isEditing ? (
+                  <input
+                    name="applicableArticle"
+                    value={editedCaseData.applicableArticle || ''}
+                    onChange={handleInputChange}
+                    className="w-full p-2 mt-2 border rounded-md"
+                  />
+                ) : (
+                  activeCase.applicableArticle
+                )}
+              </div>
+              <div>
+                <span className="font-semibold">Tags:</span>
+                <p>{extractRelevantText(activeCase.tags)}</p>
+              </div>
+              <div>
+                <span className="font-semibold">Description:</span>
+                {isEditing ? (
+                  <textarea
+                    name="description"
+                    value={editedCaseData.description || ''}
+                    onChange={handleInputChange}
+                    className="w-full p-2 mt-2 border rounded-md"
+                    rows="4"
+                  />
+                ) : (
+                  activeCase.description
+                )}
+              </div>
+              <div>
+                <span className="font-semibold">Status:</span>
+                {isEditing ? (
+                  <select
+                    name="status"
+                    value={editedCaseData.status || ''}
+                    onChange={handleInputChange}
+                    className="w-full p-2 mt-2 border rounded-md"
                   >
-                    <strong className="block font-semibold text-gray-700 mb-2">Description:</strong>
-                    <p>{caseItem.description}</p>
-                  </div>
+                    <option value="assigned">Assigned</option>
+                    <option value="under-investigation">Under Investigation</option>
+                    <option value="closed">Closed</option>
+                  </select>
+                ) : (
+                  activeCase.status
+                )}
+              </div>
+              {isEditing && (
+                <div className="mt-4">
+                  <button
+                    onClick={handleSaveChanges}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg"
+                  >
+                    Save Changes
+                  </button>
                 </div>
-              ))}
+              )}
+            </div>
           </div>
         </div>
       )}
