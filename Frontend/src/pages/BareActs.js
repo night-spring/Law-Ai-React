@@ -252,7 +252,7 @@ const BareActs = () => {
 
       <main className="main-content flex-grow">
         <h2 className="bareacts-title text-4xl font-semibold text-blue-900 text-center mb-8 mt-8">
-          Bare Acts Database
+          Bare Acts Library
         </h2>
 
         <div className="toggle-section flex justify-center mb-6">

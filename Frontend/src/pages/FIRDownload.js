@@ -587,7 +587,7 @@ return (
     <div className="original-formats">
     <h3 className="text-3xl font-semibold text-black-900 text-center mb-8 mt-8">Original Format</h3>
     <p className="text-center mb-8">
-      The orignal Format of the FIR as of 5th December, 2024.
+      The Official Format of the FIR as of 5th December, 2024.
     </p>
     {/* PDF Display */}
     <div className="pdf-container mx-auto my-8 max-w-4xl p-4 border-2 border-gray-300 rounded-lg shadow-md">
