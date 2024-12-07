@@ -221,7 +221,7 @@ const Database = () => {
                       openCaseDetailsModal(caseItem.id);
                       setIsEditing(true); // Open in edit mode
                     }}
-                    className="text-yellow-500 hover:underline font-semibold"
+                    className="text-blue-500 hover:underline font-semibold"
                   >
                     Edit
                   </button>
