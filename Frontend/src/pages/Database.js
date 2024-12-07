@@ -97,36 +97,85 @@ const Database = () => {
     setCases(updatedCases);
     setActiveCase(null); // Close modal after saving changes
   };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedCaseData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: value, // Always update the edited data with the current input value
     }));
   };
-
-  const extractRelevantText = (text) => {
-    const regex = /(\*{1,2})(.*?)\1/g;
-    let matches = [];
-    let match;
-
-    while ((match = regex.exec(text)) !== null) {
-      matches.push(match[2]);
+  
+  const saveCaseChanges = () => {
+    // Ensure all required fields are filled
+    if (!editedCaseData.caseHeading || !editedCaseData.query || !editedCaseData.status) {
+      alert('Please fill in all required fields.');
+      return;
     }
-
-    return matches.map((item, index) => {
-      const containsNumber = /\d/.test(item);
-      return containsNumber ? (
-        <div key={index}>
-          <span>{item}</span>
-          <br />
-        </div>
-      ) : (
-        <span key={index}>{item}</span>
-      );
-    });
+  
+    // Prepare the request body dynamically with only the updated fields
+    const updatedData = {};
+  
+    // Check if each field has been modified; if so, include it in the request body
+    if (editedCaseData.caseHeading !== activeCase.caseHeading) {
+      updatedData.caseHeading = editedCaseData.caseHeading;
+    }
+    if (editedCaseData.query !== activeCase.query) {
+      updatedData.query = editedCaseData.query;
+    }
+    if (editedCaseData.applicableArticle !== activeCase.applicableArticle) {
+      updatedData.applicableArticle = editedCaseData.applicableArticle;
+    }
+    if (editedCaseData.description !== activeCase.description) {
+      updatedData.description = editedCaseData.description;
+    }
+    if (editedCaseData.status !== activeCase.status) {
+      updatedData.status = editedCaseData.status;
+    }
+  
+    // Log the request body for debugging
+    console.log('Request body:', updatedData);
+  
+    // Ensure there is at least one field to update
+    if (Object.keys(updatedData).length === 0) {
+      alert('No changes to update.');
+      return;
+    }
+  
+    // Send the POST request with only the updated fields
+    fetch(`https://sih-backend-seven.vercel.app/case_update/${activeCase.id}/`, {
+      method: 'POST', // Use POST for updating
+      headers: {
+        'Content-Type': 'application/json', // Set content type to JSON
+      },
+      body: JSON.stringify(updatedData), // Only include the fields that have been updated
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((error) => {
+            throw new Error(error.message || 'Failed to update the case');
+          });
+        }
+        return response.json(); // Parse the response as JSON if successful
+      })
+      .then((updatedCase) => {
+        // Update the case list with the response data
+        const updatedCases = cases.map((caseItem) =>
+          caseItem.id === updatedCase.id ? updatedCase : caseItem
+        );
+  
+        setCases(updatedCases); // Update the state with the new case data
+        setActiveCase(null); // Close modal after saving changes
+        alert('Case updated successfully!');
+      })
+      .catch((error) => {
+        console.error('Error updating case:', error);
+        alert('Failed to update the case. Please try again.');
+      });
   };
+  
+  
+  
+  
 
   return (
     <div className="bareacts-container min-h-screen flex flex-col">
@@ -210,7 +259,7 @@ const Database = () => {
                   <input
                     name="caseHeading"
                     type="text"
-                    value={editedCaseData.caseHeading || ''}
+                    value={editedCaseData.caseHeading || activeCase.caseHeading || ''}
                     onChange={handleInputChange}
                     className="text-3xl font-semibold text-blue-900 w-full bg-transparent border-none"
                   />
@@ -218,12 +267,13 @@ const Database = () => {
                   activeCase.caseHeading
                 )}
               </h3>
+
               <p className="text-lg font-medium text-black-500">
                 <span className="font-semibold">Query:</span>{' '}
                 {isEditing ? (
                   <textarea
                     name="query"
-                    value={editedCaseData.query || ''}
+                    value={editedCaseData.query || activeCase.query || ''}
                     onChange={handleInputChange}
                     className="w-full p-2 mt-2 border rounded-md"
                     rows="3"
@@ -232,12 +282,13 @@ const Database = () => {
                   activeCase.query
                 )}
               </p>
+
               <div>
                 <span className="font-semibold">Applicable Articles:</span>
                 {isEditing ? (
                   <input
                     name="applicableArticle"
-                    value={editedCaseData.applicableArticle || ''}
+                    value={editedCaseData.applicableArticle || activeCase.applicableArticle || ''}
                     onChange={handleInputChange}
                     className="w-full p-2 mt-2 border rounded-md"
                   />
@@ -245,16 +296,18 @@ const Database = () => {
                   activeCase.applicableArticle
                 )}
               </div>
+
               <div>
                 <span className="font-semibold">Tags:</span>
-                <p>{extractRelevantText(activeCase.tags)}</p>
+                <p>{activeCase.tags}</p>
               </div>
+
               <div>
                 <span className="font-semibold">Description:</span>
                 {isEditing ? (
                   <textarea
                     name="description"
-                    value={editedCaseData.description || ''}
+                    value={editedCaseData.description || activeCase.description || ''}
                     onChange={handleInputChange}
                     className="w-full p-2 mt-2 border rounded-md"
                     rows="4"
@@ -263,12 +316,13 @@ const Database = () => {
                   activeCase.description
                 )}
               </div>
+
               <div>
                 <span className="font-semibold">Status:</span>
                 {isEditing ? (
                   <select
                     name="status"
-                    value={editedCaseData.status || ''}
+                    value={editedCaseData.status || activeCase.status || ''}
                     onChange={handleInputChange}
                     className="w-full p-2 mt-2 border rounded-md"
                   >
@@ -280,10 +334,11 @@ const Database = () => {
                   activeCase.status
                 )}
               </div>
+
               {isEditing && (
                 <div className="mt-4">
                   <button
-                    onClick={handleSaveChanges}
+                    onClick={saveCaseChanges} // Save changes using the updated function
                     className="px-6 py-2 bg-blue-600 text-white rounded-lg"
                   >
                     Save Changes
