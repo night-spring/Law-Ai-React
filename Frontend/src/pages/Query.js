@@ -23,8 +23,9 @@ const Query = () => {
     tags: [],
     status: '', // New field for status
     description: '' // New field for description
-  });
-  
+  });const [language, setLanguage] = useState(localStorage.getItem('language') || 'en');
+
+
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const recognition = useMemo(() => {
     const recog = new SpeechRecognition();
@@ -46,7 +47,26 @@ const Query = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
+  const translateResponse = (text, language) => {
+    switch(language) {
+      case 'English':
+        return text;
+      case 'Hindi':
+        return 'उत्तर: ' + text; // Example of a Hindi translation
+      case 'Bengali':
+        return 'উত্তর: ' + text; // Example of a Bengali translation
+      case 'Tamil':
+        return 'பதில்: ' + text; // Example of a Tamil translation
+      case 'Telugu':
+        return 'ప్రతిస్పందన: ' + text; // Example of a Telugu translation
+      case 'Marathi':
+        return 'उत्तर: ' + text; // Example of a Marathi translation
+      default:
+        return text; // Default to English if language is not recognized
+    }
+  };
+  
+  
   useEffect(() => {
     recognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
@@ -78,7 +98,10 @@ const Query = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
+  useEffect(() => {
+    const storedLanguage = localStorage.getItem('language');
+    setLanguage(storedLanguage);
+  }, [localStorage.getItem('language')]);
   const handleMicClick = () => {
     if (isListening) {
       recognition.stop();
@@ -93,41 +116,46 @@ const Query = () => {
   };
 
   const handleQuerySubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
+  e.preventDefault();
+  setIsLoading(true);
+  setError('');
 
-    try {
-      const response = await fetch('https://sih-backend-seven.vercel.app/ai/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query: query }),
-      });
+  try {
+    const response = await fetch('https://sih-backend-seven.vercel.app/ai/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query: query }),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      // Parse response into relevant fields
-      setCaseData({
-        query,
-        caseHeading: data.caseHeading || 'Untitled Case',
-        applicableArticles: data.response || 'No applicable articles',
-        tags: [],
-      });
+    // Translate the response based on the selected language
+    const translatedResponse = translateResponse(data.response || 'No response received', language);
 
-      setResponse(parseMarkdownToHTML(data.response || 'No response received'));
-      setShowPopup(true); // Show popup
-    } catch (error) {
-      console.error('Error fetching the response:', error);
-      setError('Error occurred while fetching the response');
-      setResponse('');
-    }
+    // Parse response into relevant fields
+    setCaseData({
+      query,
+      caseHeading: data.caseHeading || 'Untitled Case',
+      applicableArticles: translatedResponse || 'No applicable articles',
+      tags: [],
+    });
 
-    setIsLoading(false);
-    setQuery('');
-  };
+    // Set the translated response (already translated)
+    setResponse(parseMarkdownToHTML(translatedResponse));
+    setShowPopup(true); // Show popup
+  } catch (error) {
+    console.error('Error fetching the response:', error);
+    setError('Error occurred while fetching the response');
+    setResponse('');
+  }
 
+  setIsLoading(false);
+  setQuery('');
+};
+
+  
   const parseMarkdownToHTML = (text) => {
     return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   };
