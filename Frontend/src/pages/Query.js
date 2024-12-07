@@ -284,27 +284,48 @@ const Query = () => {
 
         {/* How it Works Modal */}
         <HowItWorksModal />
+        <div className="query-response-container flex flex-col md:flex-row justify-between items-start w-full max-w-5xl mx-auto mb-10 transition-all duration-500">
+  {/* Left Section */}
+  <div
+    className={`query-response-box bg-white p-8 rounded-lg shadow-md border border-gray-300 transition-all duration-500 ${
+      !isLoading && !error && response ? 'w-full md:w-1/2 mr-4 flex-grow min-h-[200px]' : 'w-full min-h-[200px]'
+    }`}
+  >
+    {isLoading ? (
+      <div className="flex flex-col justify-center items-center min-h-full">
+        <div className="spinner mb-4"></div>
+        <p className="loading-message text-lg text-gray-700">Processing your query, please wait...</p>
+      </div>
+    ) : error ? (
+      <p className="error-message text-lg text-red-600">{error}</p>
+    ) : (
+      <pre
+        dangerouslySetInnerHTML={{ __html: response }}
+        className="text-gray-800 font-medium leading-relaxed break-words whitespace-pre-wrap"
+        style={{
+          fontFamily: '"Arial", sans-serif',
+          fontSize: '1.1rem',
+          lineHeight: '1.6',
+        }}
+      ></pre>
+    )}
+  </div>
 
-        <div className="query-response-box bg-light-gray p-8 rounded-lg shadow-md mb-10 w-full max-w-5xl mx-auto border border-gray-300">
-          {isLoading ? (
-            <div className="flex flex-col justify-center items-center">
-              <div className="spinner mb-4"></div>
-              <p className="loading-message text-lg text-gray-700">Processing your query, please wait...</p>
-            </div>
-          ) : error ? (
-            <p className="error-message text-lg text-red-600">{error}</p>
-          ) : (
-            <pre
-              dangerouslySetInnerHTML={{ __html: response }}
-              className="text-gray-800 font-medium leading-relaxed break-words whitespace-pre-wrap"
-              style={{
-                fontFamily: '"Arial", sans-serif',
-                fontSize: '1.1rem',
-                lineHeight: '1.6',
-              }}
-            ></pre>
-          )}
-        </div>
+  {/* Right Section */}
+  {!isLoading && !error && response && (
+    <div
+      className="new-section bg-white p-8 rounded-lg shadow-md border border-gray-300 transition-all duration-500 w-full md:w-1/2 flex-grow min-h-[200px]"
+    >
+      <h2 className="text-xl font-bold text-gray-800 mb-4">The Detailed Version</h2>
+      <p className="text-gray-700 text-base leading-relaxed">
+        The Detailed information of all the applicable acts will be displayed here.
+      </p>
+    </div>
+  )}
+</div>
+
+
+
 
         <form
           onSubmit={handleQuerySubmit}
