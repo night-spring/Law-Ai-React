@@ -397,7 +397,7 @@ const BareActs = () => {
       ) : error ? (
         <p className="text-red-500 italic mt-4">{error}</p>
       ) : laws.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
+        <div className="space-y-6">
           {laws.map((law) => (
             <div
               key={law.id}
