@@ -401,7 +401,7 @@ const BareActs = () => {
           {laws.map((law) => (
             <div
               key={law.id}
-              className="law-item p-6 h-[220px] bg-white border border-gray-300 rounded-xl shadow-md hover:shadow-xl transition-transform duration-300 transform hover:scale-105 border-l-[4px] border-l-blue-500"
+              className="law-item p-6 bg-white border border-gray-300 rounded-xl shadow-md hover:shadow-xl transition-transform duration-300 transform hover:scale-105 border-l-[4px] border-l-blue-500"
             >
               <h4 className="law-title text-2xl font-semibold text-blue-800">
                 Section {law.section_id}
