@@ -313,18 +313,20 @@ const Query = () => {
         </form>
 
         {showPopup && (
-          <div
-            className="popup-alert fixed top-20 right-5 bg-blue-50 border-l-4 border-blue-600 text-blue-800 p-6 rounded-lg shadow-xl cursor-pointer max-w-xs min-w-[250px] min-h-[80px]"
-            onClick={toggleModal}
-            role="alert"
-            aria-live="assertive"
-            aria-labelledby="popup-alert-message"
-          >
-            <span id="popup-alert-message" className="font-semibold text-lg">
-              New case identified! Click to review.
-            </span>
-          </div>
-        )}
+  <div
+    className="popup-alert fixed top-36 margin-top-20 right-5 bg-blue-50 border-l-4 border-blue-600 text-blue-800 p-6 rounded-lg shadow-xl cursor-pointer max-w-xs min-w-[250px] min-h-[80px] z-[10000]"
+    onClick={toggleModal}
+    role="alert"
+    aria-live="assertive"
+    aria-labelledby="popup-alert-message"
+  >
+    <span id="popup-alert-message" className="font-semibold text-lg">
+      New case identified! Click to review.
+    </span>
+  </div>
+)}
+
+
 
 {isModalOpen && (
       <div className="modal-overlay fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
@@ -481,7 +483,8 @@ const Query = () => {
 
         {showScrollTop && (
           <div
-            className="scroll-to-top-btn fixed bottom-4 right-4 bg-blue-600 text-white p-4 rounded-full shadow-lg cursor-pointer"
+            className="scroll-to-top-btn fixed bottom-4 right-4 bg-blue-600 text-white w-12 h-12 flex items-center justify-center rounded-full shadow-lg cursor-pointer border border-white
+"
             onClick={scrollToTop}
           >
             <FaArrowUp />

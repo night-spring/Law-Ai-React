@@ -237,7 +237,7 @@ const Database = () => {
       {showScrollBtn && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 bg-blue-600 text-white w-12 h-12 rounded-full shadow-lg hover:bg-blue-700 transition-all transform hover:scale-110 flex items-center justify-center z-50"
+          className="scroll-to-top-btn fixed bottom-4 right-4 bg-blue-600 text-white w-12 h-12 flex items-center justify-center rounded-full shadow-lg cursor-pointer border border-white"
           aria-label="Back to top"
         >
           <span className="material-icons text-lg">arrow_upward</span>

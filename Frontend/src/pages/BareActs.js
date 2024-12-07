@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar";
 import MenuBar from "../components/MenuBar";
 import "../styles/BareActs.css";
 import axios from "axios";
+import { FaMicrophone, FaInfoCircle, FaArrowUp } from 'react-icons/fa';
 import Footer from "../components/Footer";
 
 const BareActs = () => {
@@ -502,7 +503,8 @@ const BareActs = () => {
     {showButton && (
       <button
         onClick={scrollToTop}
-        className="fixed bottom-8 right-8 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300"
+        className="scroll-to-top-btn fixed bottom-4 right-4 bg-blue-600 text-white w-12 h-12 flex items-center justify-center rounded-full shadow-lg cursor-pointer border border-white
+"
       >
         <span className="material-icons text-lg">arrow_upward</span>
       </button>
