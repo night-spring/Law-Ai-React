@@ -330,7 +330,15 @@ const Query = () => {
 
 {isModalOpen && (
       <div className="modal-overlay fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-        <div className="modal-content bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
+      <div className="modal-content bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative">
+        {/* Close Button */}
+        <button
+          onClick={() => setIsModalOpen(false)} // Close modal when clicked
+          className="absolute top-2 right-3 text-gray-600 hover:text-gray-800 text-4xl font-bold transition duration-200"
+          aria-label="Close modal"
+        >
+          &times; {/* Cross symbol */}
+        </button>
           <h3 className="modal-title text-2xl font-semibold mb-4">Add Case to Database</h3>
 
           <div className="modal-body max-h-60 overflow-y-auto border border-gray-300 p-4 rounded-lg">
@@ -459,14 +467,11 @@ const Query = () => {
             </div>
           </div>
 
+          
           {/* Modal Footer with Cancel and Save buttons */}
+
           <div className="modal-footer mt-4 flex justify-end space-x-4">
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="close-modal-btn bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition duration-200"
-            >
-              Cancel
-            </button>
+            
             <button
               onClick={handleSaveCase}
               className="save-case-btn bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200"
