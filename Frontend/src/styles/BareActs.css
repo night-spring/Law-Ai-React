@@ -125,3 +125,8 @@
 .search-results p strong {
   color: #000;
 }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* For 3 columns */
+  gap: 2.5rem; 
+}
