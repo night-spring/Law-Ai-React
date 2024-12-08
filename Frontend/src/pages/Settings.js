@@ -56,7 +56,6 @@ const Settings = () => {
         <p className="settings-description text-lg text-gray-600 mb-12 text-center">
           Customize your privacy, security, and accessibility settings.
         </p>
-
         <div className="settings-cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Account Settings Card */}
           <div className="setting-card bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
@@ -73,7 +72,6 @@ const Settings = () => {
               </button>
             </div>
           </div>
-
           {/* Privacy Settings Card */}
           <div className="setting-card bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
             <div className="flex items-center space-x-3 mb-4">
@@ -89,7 +87,6 @@ const Settings = () => {
               </button>
             </div>
           </div>
-
           {/* Two-Factor Authentication (2FA) Card */}
           <div className="setting-card bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
             <div className="flex items-center space-x-3 mb-4">
@@ -108,7 +105,6 @@ const Settings = () => {
               />
               <span className="text-gray-700">Enable Two-Factor Authentication</span>
             </label>
-
             {/* Real-time status update */}
             {is2FAEnabled ? (
               <p className="text-green-600 text-sm mt-4">Two-Factor Authentication is enabled. Your account is more secure.</p>
@@ -116,7 +112,6 @@ const Settings = () => {
               <p className="text-red-600 text-sm mt-4">Two-Factor Authentication is disabled. Your account is less secure.</p>
             )}
           </div>
-
           {/* Session Timeout Settings Card */}
           <div className="setting-card bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
             <div className="flex items-center space-x-3 mb-4">
@@ -137,7 +132,6 @@ const Settings = () => {
             />
             <p className="text-gray-500 text-sm mt-2">Timeout after {sessionTimeout} minutes of inactivity.</p>
           </div>
-
           {/* Accessibility Settings Card */}
           <div className="setting-card bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
             <div className="flex items-center space-x-3 mb-4">
@@ -157,7 +151,6 @@ const Settings = () => {
               <span className="text-gray-700">Enable High Contrast Mode</span>
             </label>
           </div>
-
           {/* Audit Log / Activity Log Card */}
           <div className="setting-card bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
             <div className="flex items-center space-x-3 mb-4">
@@ -179,7 +172,7 @@ const Settings = () => {
           </div>
         </div>
       </main>
-
+      {/*Footer Section*/}
       <Footer />
     </div>
   );

@@ -44,79 +44,62 @@ const Team = () => {
     <div className="bg-gray-50 font-sans">
       {/* Team Header Section */}
       <header className="text-center py-28 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white">
-  <h1 className="text-6xl font-extrabold tracking-tight mb-6 text-shadow-lg transform hover:scale-105 transition-all duration-300">
-    CODE-A-COLA
-  </h1>
-  <p className="text-2xl sm:text-3xl md:text-4xl font-medium max-w-3xl mx-auto leading-relaxed opacity-90 hover:opacity-100 transition-opacity duration-300">
-    Brewing solutions for a smarter tomorrow!
-  </p>
-</header>
-
-
-
-   {/* Team Members Section */}
-   <section className="py-16 px-6 bg-gradient-to-br from-black via-gray-900 to-black text-white">
-
-
-  <div className="container mx-auto">
-    <h2 className="text-6xl font-extrabold text-center mb-12 tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500">
-      Meet the Dream Team
-    </h2>
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-16">
-      {teamMembers.map((member, index) => (
-        <div
-          key={index}
-          className="relative bg-gradient-to-tr from-purple-800 via-indigo-800 to-blue-800 rounded-3xl shadow-2xl overflow-hidden transform transition-all hover:scale-105 hover:shadow-[0_12px_30px_rgba(138,43,226,0.8)] group duration-700"
-        >
-          {/* Glowing Neon Background Effect */}
-          <div className="absolute inset-0 z-0 blur-3xl opacity-30 group-hover:opacity-70 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500"></div>
-
-          {/* Profile Image */}
-          <div className="relative flex flex-col items-center p-8 z-10">
-            <div className="w-40 h-40 rounded-full overflow-hidden border-[6px] border-gradient-to-tr from-pink-500 via-purple-500 to-blue-500 mb-8 shadow-xl transform group-hover:scale-110 transition duration-500">
-              <img
-                src={member.image}
-                alt={member.name}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            {/* Glowing Pulse Effect */}
-            <div className="absolute -top-4 -right-4 w-16 h-16 bg-pink-500 opacity-20 rounded-full animate-pulse group-hover:opacity-50"></div>
-
-            {/* Name and Role */}
-            <h3 className="text-3xl font-extrabold text-white group-hover:text-pink-500 transition duration-500">
-              {member.name}
-            </h3>
-            <p className="text-xl text-purple-300 mb-3 group-hover:text-blue-300 transition-all">
-              {member.role}
-            </p>
-            <p className="text-base text-gray-300 text-center leading-relaxed group-hover:text-gray-200">
-              {member.description}
-            </p>
-          </div>
-
-          {/* Connect Button */}
-          <div className="bg-gradient-to-br from-indigo-800 via-purple-700 to-pink-700 p-6 text-center rounded-b-3xl">
-            <button className="relative px-10 py-4 text-indigo-900 font-semibold rounded-full text-lg shadow-2xl bg-gradient-to-r from-white via-gray-200 to-gray-100 transition transform hover:scale-125 hover:bg-gradient-to-r hover:from-pink-100 hover:to-blue-100 hover:text-pink-600">
-              <span className="absolute inset-0 w-full h-full bg-gradient-to-tr from-purple-500 via-pink-500 to-blue-500 opacity-15 blur-xl rounded-full"></span>
-              Connect
-            </button>
+        <h1 className="text-6xl font-extrabold tracking-tight mb-6 text-shadow-lg transform hover:scale-105 transition-all duration-300">
+          CODE-A-COLA
+        </h1>
+        <p className="text-2xl sm:text-3xl md:text-4xl font-medium max-w-3xl mx-auto leading-relaxed opacity-90 hover:opacity-100 transition-opacity duration-300">
+          Brewing solutions for a smarter tomorrow!
+        </p>
+      </header>
+      {/* Team Members Section */}
+      <section className="py-16 px-6 bg-gradient-to-br from-black via-gray-900 to-black text-white">
+        <div className="container mx-auto">
+          <h2 className="text-6xl font-extrabold text-center mb-12 tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500">
+            Meet the Dream Team
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-16">
+            {teamMembers.map((member, index) => (
+              <div
+                key={index}
+                className="relative bg-gradient-to-tr from-purple-800 via-indigo-800 to-blue-800 rounded-3xl shadow-2xl overflow-hidden transform transition-all hover:scale-105 hover:shadow-[0_12px_30px_rgba(138,43,226,0.8)] group duration-700"
+              >
+                {/* Glowing Neon Background Effect */}
+                <div className="absolute inset-0 z-0 blur-3xl opacity-30 group-hover:opacity-70 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500"></div>
+                {/* Profile Image */}
+                <div className="relative flex flex-col items-center p-8 z-10">
+                  <div className="w-40 h-40 rounded-full overflow-hidden border-[6px] border-gradient-to-tr from-pink-500 via-purple-500 to-blue-500 mb-8 shadow-xl transform group-hover:scale-110 transition duration-500">
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  {/* Glowing Pulse Effect */}
+                  <div className="absolute -top-4 -right-4 w-16 h-16 bg-pink-500 opacity-20 rounded-full animate-pulse group-hover:opacity-50"></div>
+                  {/* Name and Role */}
+                  <h3 className="text-3xl font-extrabold text-white group-hover:text-pink-500 transition duration-500">
+                    {member.name}
+                  </h3>
+                  <p className="text-xl text-purple-300 mb-3 group-hover:text-blue-300 transition-all">
+                    {member.role}
+                  </p>
+                  <p className="text-base text-gray-300 text-center leading-relaxed group-hover:text-gray-200">
+                    {member.description}
+                  </p>
+                </div>
+                {/* Connect Button */}
+                <div className="bg-gradient-to-br from-indigo-800 via-purple-700 to-pink-700 p-6 text-center rounded-b-3xl">
+                  <button className="relative px-10 py-4 text-indigo-900 font-semibold rounded-full text-lg shadow-2xl bg-gradient-to-r from-white via-gray-200 to-gray-100 transition transform hover:scale-125 hover:bg-gradient-to-r hover:from-pink-100 hover:to-blue-100 hover:text-pink-600">
+                    <span className="absolute inset-0 w-full h-full bg-gradient-to-tr from-purple-500 via-pink-500 to-blue-500 opacity-15 blur-xl rounded-full"></span>
+                    Connect
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      ))}
-    </div>
-  </div>
-</section>
-
-
-
-
-
-
-
-
-
-
+      </section>
+      {/*Footer Section*/}
       <Footer />
     </div>
   );

@@ -74,12 +74,10 @@ const Login = () => {
     <div className="login-container light-mode">
       {/* Conditionally render Sidebar or MenuBar based on screen size */}
       {isMobile ? <MenuBar /> : <Sidebar isLoggedIn={isLoggedIn} userId={userId} className="sidebar" />}
-
       <main className="main-content">
         {isLoggedIn ? (
           <>
             <h2 className="login-title text-4xl font-semibold text-blue-900 text-center mb-8 mt-14">You are logged in</h2>
-
             {/* Display user details in a visually appealing format */}
             <div className="user-details">
               <p><strong>Name:</strong> {name}</p>

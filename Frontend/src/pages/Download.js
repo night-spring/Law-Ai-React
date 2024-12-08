@@ -11,7 +11,6 @@ const Download = () => {
           Choose your platform to download the LawAI installation file and start using our services.
         </p>
       </div>
-
       {/* Download Options */}
       <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-12 text-center">
         {/* Android */}
@@ -30,7 +29,6 @@ const Download = () => {
             Download APK
           </button>
         </a>
-
         {/* iOS */}
         <div className="download-card opacity-50">
           <img
@@ -41,7 +39,6 @@ const Download = () => {
           <h3 className="text-blue-900 text-lg font-medium mt-2">iOS</h3>
           <p className="mt-3 text-gray-500">Coming Soon</p>
         </div>
-
         {/* Linux */}
         <div className="download-card opacity-50">
           <img
@@ -52,7 +49,6 @@ const Download = () => {
           <h3 className="text-blue-900 text-lg font-medium mt-2">Linux</h3>
           <p className="mt-3 text-gray-500">Coming Soon</p>
         </div>
-
         {/* Windows */}
         <div className="download-card opacity-50">
           <img

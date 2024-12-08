@@ -84,13 +84,13 @@ const Database = () => {
     const updatedCases = cases.map((caseItem) =>
       caseItem.id === activeCase.id
         ? {
-            ...caseItem,
-            caseHeading: editedCaseData.caseHeading,
-            query: editedCaseData.query,
-            applicableArticle: editedCaseData.applicableArticle,
-            description: editedCaseData.description,
-            status: editedCaseData.status,
-          }
+          ...caseItem,
+          caseHeading: editedCaseData.caseHeading,
+          query: editedCaseData.query,
+          applicableArticle: editedCaseData.applicableArticle,
+          description: editedCaseData.description,
+          status: editedCaseData.status,
+        }
         : caseItem
     );
 
@@ -104,17 +104,17 @@ const Database = () => {
       [name]: value, // Always update the edited data with the current input value
     }));
   };
-  
+
   const saveCaseChanges = () => {
     // Ensure all required fields are filled
     if (!editedCaseData.caseHeading || !editedCaseData.query || !editedCaseData.status) {
       alert('Please fill in all required fields.');
       return;
     }
-  
+
     // Prepare the request body dynamically with only the updated fields
     const updatedData = {};
-  
+
     // Check if each field has been modified; if so, include it in the request body
     if (editedCaseData.caseHeading !== activeCase.caseHeading) {
       updatedData.caseHeading = editedCaseData.caseHeading;
@@ -131,16 +131,16 @@ const Database = () => {
     if (editedCaseData.status !== activeCase.status) {
       updatedData.status = editedCaseData.status;
     }
-  
+
     // Log the request body for debugging
     console.log('Request body:', updatedData);
-  
+
     // Ensure there is at least one field to update
     if (Object.keys(updatedData).length === 0) {
       alert('No changes to update.');
       return;
     }
-  
+
     // Send the POST request with only the updated fields
     fetch(`https://sih-backend-seven.vercel.app/case_update/${activeCase.id}/`, {
       method: 'POST', // Use POST for updating
@@ -162,7 +162,7 @@ const Database = () => {
         const updatedCases = cases.map((caseItem) =>
           caseItem.id === updatedCase.id ? updatedCase : caseItem
         );
-  
+
         setCases(updatedCases); // Update the state with the new case data
         setActiveCase(null); // Close modal after saving changes
         alert('Case updated successfully!');
@@ -172,85 +172,78 @@ const Database = () => {
         alert('Failed to update the case. Please try again.');
       });
   };
-  
-  
-  
-  
 
   return (
     <div className="bareacts-container min-h-screen flex flex-col">
       {isMobile ? <MenuBar /> : <Sidebar />}
 
       <main className="main-content flex-grow p-8 bg-gray-50">
-    <h2 className="database-title text-4xl font-semibold text-blue-900 text-center mb-8 mt-8">
-      Case Database
-    </h2>
+        <h2 className="database-title text-4xl font-semibold text-blue-900 text-center mb-8 mt-8">
+          Case Database
+        </h2>
 
-    {cases.length === 0 ? (
-      <p className="text-center text-xl font-semibold text-gray-600">No cases available</p>
-    ) : (
-      <div className="case-cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {cases.map((caseItem) => (
-          <div
-            key={caseItem.id}
-            className="case-card bg-white p-6 border border-gray-300 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out flex flex-col"
-          >
-            <div className="case-header flex justify-between items-center mb-4">
-              <h3 className="text-2xl font-semibold text-blue-900">{caseItem.caseHeading}</h3>
-              <span
-                className={`status-badge inline-block py-1 px-4 rounded-full text-white text-sm font-medium ${getStatusColor(
-                  caseItem.status
-                )}`}
+        {cases.length === 0 ? (
+          <p className="text-center text-xl font-semibold text-gray-600">No cases available</p>
+        ) : (
+          <div className="case-cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {cases.map((caseItem) => (
+              <div
+                key={caseItem.id}
+                className="case-card bg-white p-6 border border-gray-300 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out flex flex-col"
               >
-                {caseItem.status}
-              </span>
-            </div>
-            <p className="text-md font-semibold text-darkBlue-800 mt-2">{caseItem.query}</p>
-            <p className="text-sm text-blue-400 mt-2">
-  <strong className="text-sm text-blue-900 mt-2">Tags:</strong>{" "}
-  {caseItem.tags
-    ? caseItem.tags
-        .replace(/[\[\]']+/g, '') // Remove brackets and single quotes
-        .split(',') // Split the string into individual tags
-        .map((tag, index) => (
-          <span
-            key={index}
-            className="inline-block bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm mr-2 mb-2"
-          >
-            {tag.trim()}
-          </span>
-        ))
-    : 'No tags available'}
-</p>
-
-
-            {/* Make this div flex-grow to push buttons to the bottom */}
-            <div className="flex-grow"></div>
-            <div className="flex justify-between mt-4">
-              <button
-                onClick={() => openCaseDetailsModal(caseItem.id)}
-                className="text-blue-600 hover:underline font-semibold"
-              >
-                Show Details
-              </button>
-              <button
-                onClick={() => {
-                  openCaseDetailsModal(caseItem.id);
-                  setIsEditing(true); // Open in edit mode
-                }}
-                className="text-blue-500 hover:underline font-semibold"
-              >
-                Edit
-              </button>
-            </div>
+                <div className="case-header flex justify-between items-center mb-4">
+                  <h3 className="text-2xl font-semibold text-blue-900">{caseItem.caseHeading}</h3>
+                  <span
+                    className={`status-badge inline-block py-1 px-4 rounded-full text-white text-sm font-medium ${getStatusColor(
+                      caseItem.status
+                    )}`}
+                  >
+                    {caseItem.status}
+                  </span>
+                </div>
+                <p className="text-md font-semibold text-darkBlue-800 mt-2">{caseItem.query}</p>
+                <p className="text-sm text-blue-400 mt-2">
+                  <strong className="text-sm text-blue-900 mt-2">Tags:</strong>{" "}
+                  {caseItem.tags
+                    ? caseItem.tags
+                      .replace(/[\[\]']+/g, '') // Remove brackets and single quotes
+                      .split(',') // Split the string into individual tags
+                      .map((tag, index) => (
+                        <span
+                          key={index}
+                          className="inline-block bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm mr-2 mb-2"
+                        >
+                          {tag.trim()}
+                        </span>
+                      ))
+                    : 'No tags available'}
+                </p>
+                {/* Make this div flex-grow to push buttons to the bottom */}
+                <div className="flex-grow"></div>
+                <div className="flex justify-between mt-4">
+                  <button
+                    onClick={() => openCaseDetailsModal(caseItem.id)}
+                    className="text-blue-600 hover:underline font-semibold"
+                  >
+                    Show Details
+                  </button>
+                  <button
+                    onClick={() => {
+                      openCaseDetailsModal(caseItem.id);
+                      setIsEditing(true); // Open in edit mode
+                    }}
+                    className="text-blue-500 hover:underline font-semibold"
+                  >
+                    Edit
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    )}
-  </main>
-
+        )}
+      </main>
+     {/*Footer section*/}
       <Footer />
-
       {showScrollBtn && (
         <button
           onClick={scrollToTop}
@@ -284,7 +277,6 @@ const Database = () => {
                   activeCase.caseHeading
                 )}
               </h3>
-
               <p className="text-lg font-medium text-black-500">
                 <span className="font-semibold">Query:</span>{' '}
                 {isEditing ? (
@@ -299,58 +291,49 @@ const Database = () => {
                   activeCase.query
                 )}
               </p>
-
               <div>
-  <span className="font-semibold">Applicable Articles:</span>
-  {isEditing ? (
-    <input
-      name="applicableArticle"
-      value={editedCaseData.applicableArticle || activeCase.applicableArticle || ''}
-      onChange={handleInputChange}
-      className="w-full p-2 mt-2 border rounded-md"
-    />
-  ) : (
-    // Extract and display all content between **, each on a new line
-    activeCase.applicableArticle
-      ? activeCase.applicableArticle
-          .match(/\*\*(.*?)\*\*/g) // Capture text between ** markers
-          ?.map((match, index) => (
-            <div key={index} className="mt-2">
-              {match.replace(/\*\*/g, '')} {/* Remove the ** markers */}
-            </div>
-          )) || 'No applicable article found'
-      : 'No applicable article found'
-  )}
-</div>
-
-
-
-
+                <span className="font-semibold">Applicable Articles:</span>
+                {isEditing ? (
+                  <input
+                    name="applicableArticle"
+                    value={editedCaseData.applicableArticle || activeCase.applicableArticle || ''}
+                    onChange={handleInputChange}
+                    className="w-full p-2 mt-2 border rounded-md"
+                  />
+                ) : (
+                  // Extract and display all content between **, each on a new line
+                  activeCase.applicableArticle
+                    ? activeCase.applicableArticle
+                      .match(/\*\*(.*?)\*\*/g) // Capture text between ** markers
+                      ?.map((match, index) => (
+                        <div key={index} className="mt-2">
+                          {match.replace(/\*\*/g, '')} {/* Remove the ** markers */}
+                        </div>
+                      )) || 'No applicable article found'
+                    : 'No applicable article found'
+                )}
+              </div>
               <div>
-  <span className="font-semibold">Tags:</span>
-  <div className="mt-2 flex flex-wrap gap-2">
-    {activeCase.tags ? (
-      // Split the string into an array and map over it to display tags
-      activeCase.tags
-        .replace(/[\[\]']+/g, '')  // Remove brackets and single quotes
-        .split(',') // Split the string into an array based on commas
-        .map((tag, index) => (
-          <span
-            key={index}
-            className="bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm flex items-center space-x-2"
-          >
-            <span>{tag.trim()}</span> {/* trim spaces */}
-          </span>
-        ))
-    ) : (
-      <p>No tags available</p>
-    )}
-  </div>
-</div>
-
-
-
-
+                <span className="font-semibold">Tags:</span>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {activeCase.tags ? (
+                    // Split the string into an array and map over it to display tags
+                    activeCase.tags
+                      .replace(/[\[\]']+/g, '')  // Remove brackets and single quotes
+                      .split(',') // Split the string into an array based on commas
+                      .map((tag, index) => (
+                        <span
+                          key={index}
+                          className="bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm flex items-center space-x-2"
+                        >
+                          <span>{tag.trim()}</span> {/* trim spaces */}
+                        </span>
+                      ))
+                  ) : (
+                    <p>No tags available</p>
+                  )}
+                </div>
+              </div>
               <div>
                 <span className="font-semibold">Description:</span>
                 {isEditing ? (
@@ -365,24 +348,22 @@ const Database = () => {
                   activeCase.description
                 )}
               </div>
-
               <div className="relative">
-  <select
-    name="status"
-    value={editedCaseData.status || activeCase.status || ''}
-    onChange={handleInputChange}
-    className={`w-full p-2 mt-2 border rounded-md bg-white appearance-none 
-      ${editedCaseData.status === 'assigned' || activeCase.status === 'assigned' ? 'bg-green-100' : ''}
-      ${editedCaseData.status === 'under-investigation' || activeCase.status === 'under-investigation' ? 'bg-yellow-100' : ''}
-      ${editedCaseData.status === 'closed' || activeCase.status === 'closed' ? 'bg-red-100' : ''}`}
-  >
-    <option value="assigned" className="bg-green-100">Assigned</option>
-    <option value="under-investigation" className="bg-yellow-100">Under Investigation</option>
-    <option value="closed" className="bg-red-100">Closed</option>
-  </select>
-</div>
-
-
+                <select
+                  name="status"
+                  value={editedCaseData.status || activeCase.status || ''}
+                  onChange={handleInputChange}
+                  className={`w-full p-2 mt-2 border rounded-md bg-white appearance-none 
+                    ${editedCaseData.status === 'assigned' || activeCase.status === 'assigned' ? 'bg-green-100' : ''}
+                    ${editedCaseData.status === 'under-investigation' || activeCase.status === 'under-investigation' ? 'bg-yellow-100' : ''}
+                    ${editedCaseData.status === 'closed' || activeCase.status === 'closed' ? 'bg-red-100' : ''}`}
+                              >
+                  <option value="assigned" className="bg-green-100">Assigned</option>
+                  <option value="under-investigation" className="bg-yellow-100">Under Investigation</option>
+                  <option value="closed" className="bg-red-100">Closed</option>
+                </select>
+              </div>
+              
               {isEditing && (
                 <div className="mt-4">
                   <button

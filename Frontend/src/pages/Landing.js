@@ -45,46 +45,41 @@ const Landing = () => {
     <div className="landing bg-gray-100 text-gray-900 font-sans">
       {/* Header Section */}
       <header className="bg-gradient-to-r from-blue-800 via-indigo-800 to-purple-800 text-white shadow-lg">
-  <div className="container mx-auto px-6 py-4 flex justify-between items-center flex-wrap">
-    {/* Left Section: Logo and Title */}
-    <div className="flex items-center space-x-4 flex-shrink-0">
-      <img
-        src={img1}
-        alt="Emblem of India"
-        className="h-14"
-      />
-      <div className="text-left">
-        <h1 className="text-lg sm:text-xl md:text-2xl font-bold tracking-wide">
-          LawAI Portal
-        </h1>
-        <p className="text-xs sm:text-sm text-gray-200">
-          Enforcing Law & Justice for Government of India
-        </p>
-      </div>
-    </div>
-
-    {/* Right Section: Buttons */}
-    <div className="flex items-center space-x-4 mt-4 md:mt-0">
-      <button
-        className="bg-white text-blue-800 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg transform transition hover:scale-105"
-        onClick={handleDownload}
-        aria-label="Download resources"
-      >
-        Download Software
-      </button>
-      <button
-        className="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold shadow-md hover:bg-blue-500 transform transition hover:scale-105"
-        onClick={() => window.open("https://india.gov.in", "_blank")}
-      >
-        Visit India.gov.in
-      </button>
-    </div>
-  </div>
-</header>
-
-
-
-
+        <div className="container mx-auto px-6 py-4 flex justify-between items-center flex-wrap">
+          {/* Left Section: Logo and Title */}
+          <div className="flex items-center space-x-4 flex-shrink-0">
+            <img
+              src={img1}
+              alt="Emblem of India"
+              className="h-14"
+            />
+            <div className="text-left">
+              <h1 className="text-lg sm:text-xl md:text-2xl font-bold tracking-wide">
+                LawAI Portal
+              </h1>
+              <p className="text-xs sm:text-sm text-gray-200">
+                Enforcing Law & Justice for Government of India
+              </p>
+            </div>
+          </div>
+          {/* Right Section: Buttons */}
+          <div className="flex items-center space-x-4 mt-4 md:mt-0">
+            <button
+              className="bg-white text-blue-800 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg transform transition hover:scale-105"
+              onClick={handleDownload}
+              aria-label="Download resources"
+            >
+              Download Software
+            </button>
+            <button
+              className="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold shadow-md hover:bg-blue-500 transform transition hover:scale-105"
+              onClick={() => window.open("https://india.gov.in", "_blank")}
+            >
+              Visit India.gov.in
+            </button>
+          </div>
+        </div>
+      </header>
       {/* Back to Top Button */}
       {showButton && (
         <button
@@ -95,7 +90,6 @@ const Landing = () => {
           <span className="material-icons text-lg">arrow_upward</span>
         </button>
       )}
-
       {/* Navigation */}
       <nav className="bg-gradient-to-r from-blue-800 to-blue-600 text-white text-sm py-4 shadow-md">
         <div className="container mx-auto px-6 flex justify-center space-x-10">
@@ -133,78 +127,66 @@ const Landing = () => {
           </a>
         </div>
       </nav>
-
-
       {/* Hero Section */}
       <main className="container mx-auto px-4 py-8">
-      <section
-  id="home"
-  className="hero bg-gradient-to-br from-blue-600 to-purple-400 py-16 sm:py-20 text-center shadow-2xl"
->
-  {/* Main Heading */}
-  <h1 className="text-4xl sm:text-5xl font-extrabold text-white mb-6 tracking-wide leading-tight">
-    Empowering Law Enforcement with AI
-  </h1>
-
-  {/* Subtext */}
-  <p className="text-gray-200 text-base sm:text-lg md:text-xl mb-8 sm:mb-10 leading-relaxed max-w-4xl mx-auto">
-    Revolutionize law enforcement with AI-powered tools. Streamline FIR filing, 
-    access legal resources, and enhance operational efficiency with cutting-edge 
-    technology.
-  </p>
-
-  {/* Call-to-Action Buttons */}
-  <div className="flex justify-center space-x-4 sm:space-x-6">
-    <a
-      href="/home/query"
-      className="bg-yellow-400 text-blue-900 px-8 sm:px-10 py-3 sm:py-4 rounded-full text-sm sm:text-lg font-semibold shadow-lg hover:bg-yellow-500 hover:shadow-xl transition-all duration-300"
-    >
-      Get Started
-    </a>
-
-    <a
-      href="#features"
-      className="bg-white text-blue-800 px-8 sm:px-10 py-3 sm:py-4 rounded-full text-sm sm:text-lg font-medium shadow-lg hover:bg-gray-100 hover:shadow-xl transition-all duration-300"
-    >
-      Learn More
-    </a>
-  </div>
-</section>
-
-
-
+        <section
+          id="home"
+          className="hero bg-gradient-to-br from-blue-600 to-purple-400 py-16 sm:py-20 text-center shadow-2xl"
+        >
+          {/* Main Heading */}
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-white mb-6 tracking-wide leading-tight">
+            Empowering Law Enforcement with AI
+          </h1>
+          {/* Subtext */}
+          <p className="text-gray-200 text-base sm:text-lg md:text-xl mb-8 sm:mb-10 leading-relaxed max-w-4xl mx-auto">
+            Revolutionize law enforcement with AI-powered tools. Streamline FIR filing,
+            access legal resources, and enhance operational efficiency with cutting-edge
+            technology.
+          </p>
+          {/* Call-to-Action Buttons */}
+          <div className="flex justify-center space-x-4 sm:space-x-6">
+            <a
+              href="/home/query"
+              className="bg-yellow-400 text-blue-900 px-8 sm:px-10 py-3 sm:py-4 rounded-full text-sm sm:text-lg font-semibold shadow-lg hover:bg-yellow-500 hover:shadow-xl transition-all duration-300"
+            >
+              Get Started
+            </a>
+            <a
+              href="#features"
+              className="bg-white text-blue-800 px-8 sm:px-10 py-3 sm:py-4 rounded-full text-sm sm:text-lg font-medium shadow-lg hover:bg-gray-100 hover:shadow-xl transition-all duration-300"
+            >
+              Learn More
+            </a>
+          </div>
+        </section>
         {/* Image Section */}
         <section className="image-section py-16 bg-gradient-to-r from-gray-100 to-white mt-12">
-  <div className="container mx-auto text-center relative px-4">
-    {/* Image */}
-    <div className="relative mb-12 hover:shadow-lg transition-shadow duration-300 ease-in-out">
-      <img
-        src={img}
-        alt="Indian Government Building"
-        className="mx-auto rounded-2xl shadow-2xl transform transition-transform hover:scale-105 hover:shadow-xl"
-        style={{ maxHeight: '500px', objectFit: 'cover', width: '100%', borderRadius: '1rem' }}
-      />
-      {/* Overlay */}
-      <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-50 rounded-xl">
-        <p className="text-white text-lg md:text-2xl font-semibold text-center px-6 py-4 md:px-12 md:py-6">
-          An initiative representing trust and authority abiding by the constitution.
-        </p>
-      </div>
-    </div>
-
-    {/* Additional Description */}
-    <p className="text-gray-700 text-md md:text-xl mx-auto max-w-8xl px-4 md:px-8 mt-6">
-      This initiative is designed to bring the power of technology to law enforcement agencies, providing them with the resources they need to uphold justice and maintain public trust.
-    </p>
-  </div>
-</section>
-
-
+          <div className="container mx-auto text-center relative px-4">
+            {/* Image */}
+            <div className="relative mb-12 hover:shadow-lg transition-shadow duration-300 ease-in-out">
+              <img
+                src={img}
+                alt="Indian Government Building"
+                className="mx-auto rounded-2xl shadow-2xl transform transition-transform hover:scale-105 hover:shadow-xl"
+                style={{ maxHeight: '500px', objectFit: 'cover', width: '100%', borderRadius: '1rem' }}
+              />
+              {/* Overlay */}
+              <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-50 rounded-xl">
+                <p className="text-white text-lg md:text-2xl font-semibold text-center px-6 py-4 md:px-12 md:py-6">
+                  An initiative representing trust and authority abiding by the constitution.
+                </p>
+              </div>
+            </div>
+            {/* Additional Description */}
+            <p className="text-gray-700 text-md md:text-xl mx-auto max-w-8xl px-4 md:px-8 mt-6">
+              This initiative is designed to bring the power of technology to law enforcement agencies, providing them with the resources they need to uphold justice and maintain public trust.
+            </p>
+          </div>
+        </section>
         {/* Features Section */}
         <section id="features" className="features bg-gray-50 py-12 mt-10">
           <KeyFeatures />
         </section>
-
         {/* Vision Section */}
         <section id="vision" className="vision bg-gray-50 py-16">
           <div className="container mx-auto text-center px-6">
@@ -323,7 +305,6 @@ const Landing = () => {
           </div>
         </section>
       </main>
-
       {/* Footer Section */}
       <Footer />
     </div>
