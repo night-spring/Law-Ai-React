@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { FaMicrophone, FaInfoCircle, FaArrowUp } from 'react-icons/fa';
 import Sidebar from '../components/Sidebar';
 import Menubar from '../components/MenuBar';
+import axios from 'axios';
+
 import Footer from '../components/Footer';
 import '../styles/Query.css';
 
@@ -15,6 +17,11 @@ const Query = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [tagInput, setTagInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedActType, setSelectedActType] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+
   const [showPopup, setShowPopup] = useState(false);
   const [caseData, setCaseData] = useState({
     query: '',
@@ -64,6 +71,70 @@ const Query = () => {
       default:
         return text; // Default to English if language is not recognized
     }
+  };
+  
+  const handleSearch = async (e, actName, query) => {
+    e.preventDefault(); // Prevent default button behavior
+    setLoading(true); // Indicate loading state
+    setError(null); // Clear any existing errors
+  
+    // Ensure both actName and query are provided
+    if (!actName) {
+      setError("An act type is required to perform the search.");
+      setLoading(false);
+      return;
+    }
+  
+    try {
+      // Make the API call
+      const response = await axios.post(
+        "https://sih-backend-seven.vercel.app/search/",
+        {
+          query: query || "", // Include query if present, else empty string
+          act: actName, // Pass the act name
+        },
+        {
+          headers: {
+            "Content-Type": "application/json", // Set Content-Type header
+          },
+        }
+      );
+  
+      // Update the results
+      setSearchResults(response.data.data);
+    } catch (err) {
+      // Handle any API errors
+      setError("An error occurred while fetching results.");
+      console.error(err);
+    } finally {
+      setLoading(false); // End loading state
+    }
+  };
+  
+  
+  const renderSearchResults = () => {
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+  
+    if (error) {
+      return <div className="text-red-500">{error}</div>;
+    }
+  
+    // Ensure searchResults is not empty or invalid
+    if (!Array.isArray(searchResults) || searchResults.length === 0) {
+      return <div>No results found.</div>;
+    }
+  
+    return (
+      <div>
+        <h3 className="text-xl font-semibold mb-2">Search Results:</h3>
+        <pre className="bg-gray-100 p-4 rounded-lg">
+          {/* Display the raw JSON response */}
+          {JSON.stringify(searchResults, null, 2)}
+        </pre>
+      </div>
+    );
   };
   
   
@@ -332,72 +403,102 @@ const Query = () => {
     lineHeight: '1.6',
   }}
 >
-  {
-    (() => {
-      // Sample input string (you should replace this with the actual response or string)
-      const inputString = response || "";
+  {(() => {
+    // Regular expression to capture all multi-digit numbers (sections)
+    const regex = /\d+/g;
+    let matches = [];
+    let match;
 
-      // Regular expression to capture all multi-digit numbers (sections)
-      const regex = /\d+/g;
-      let matches = [];
-      let match;
+    // Extract all matches from inputString
+    while ((match = regex.exec(response || "")) !== null) {
+      matches.push(match[0]);
+    }
 
-      // Extract all matches from inputString
-      while ((match = regex.exec(inputString)) !== null) {
-        matches.push(match[0]);
-      }
+    let lastAct = null;
+    let result = [];
+    let queries = [];
 
-      let lastAct = null;
-      let result = [];
-      let queries = [];
+    // Act names mapping (ipc, crpc, etc.)
+    const actNames = {
+      1860: 'ipc',    // Indian Penal Code
+      1973: 'crpc',   // Code of Criminal Procedure
+      1989: 'bns',    // The Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act
+      1955: 'iea',    // The Protection of Civil Rights Act
+      1908: 'cpc',    // Code of Civil Procedure
+      1988: 'mva',    // Motor Vehicles Act
+    };
 
-      // Act names mapping (ipc, crpc, etc.)
-      const actNames = {
-        1860: 'ipc',    // Indian Penal Code
-        1973: 'crpc',   // Code of Criminal Procedure
-        1989: 'bns',    // The Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act
-        1955: 'iea',    // The Protection of Civil Rights Act
-        1872: 'evidence act',
-        1908: 'cpc',    // Code of Civil Procedure
-        1988: 'mva',    // Motor Vehicles Act
-      };
+    matches.forEach((num) => {
+      num = num.trim();
 
-      matches.forEach((num) => {
-        num = num.trim();
-
-        if (num.length === 4) {
-          // If 'act' is found, push the previous act-query pair if there are queries
-          if (lastAct) {
-            if (queries.length === 0) {
-              result.push(`${actNames[lastAct] || lastAct}, query=`);
-            } else {
-              queries.forEach(query => {
-                result.push(`${actNames[lastAct] || lastAct}, query=${query}`);
-              });
-            }
+      if (num.length === 4) {
+        // If 'act' is found, process the previous act-query pair
+        if (lastAct) {
+          if (queries.length === 0) {
+            result.push({ act: lastAct, query: null });
+          } else {
+            queries.forEach(query => {
+              result.push({ act: lastAct, query });
+            });
           }
-          lastAct = num;  // Update the act to the current number
-          queries = [];    // Reset queries for new act
-        } else if (num.length === 3) {
-          queries.push(num);  // Add the query number to the list
         }
-      });
-
-      // Add the final act-query pair if necessary
-      if (lastAct) {
-        if (queries.length === 0) {
-          result.push(`${actNames[lastAct] || lastAct}, query=`);
-        } else {
-          queries.forEach(query => {
-            result.push(`${actNames[lastAct] || lastAct}, query=${query}`);
-          });
-        }
+        lastAct = num;  // Update the act to the current number
+        queries = [];   // Reset queries for new act
+      } else if (num.length === 3) {
+        queries.push(num);  // Add the query number to the list
       }
+    });
 
-      return result.join('\n') || 'No applicable numbers found.';
-    })()
-  }
+    // Add the final act-query pair if necessary
+    if (lastAct) {
+      if (queries.length === 0) {
+        result.push({ act: lastAct, query: null });
+      } else {
+        queries.forEach(query => {
+          result.push({ act: lastAct, query });
+        });
+      }
+    }
+
+    const renderButtons = result.map((item, index) => {
+      const actName = actNames[item.act]; // Map act to its name
+      if (!actName) return null; // Skip items without valid act mappings
+    
+      // Check if actName and item.query are correctly assigned before passing to handleSearch
+      console.log("Act Name:", actName);
+      console.log("Query:", item.query);
+    
+      return (
+        <button
+          key={index}
+          onClick={(e) => {
+            console.log("Button clicked");
+            // Pass both actName and item.query to handleSearch
+            handleSearch(e, actName, item.query); // Act and query passed here
+          }}
+          className="bg-blue-100 text-blue-600 px-3 py-1 rounded-lg text-sm hover:bg-blue-600 hover:text-white transition duration-200 mb-1 block"
+        >
+          {/* Display both actName and item.query in the button */}
+          {`${actName}${item.query ? ` ${item.query}` : ""}`}
+        </button>
+      );
+    });
+    
+
+    return (
+      <>
+        {/* Render the act-query buttons */}
+        {renderButtons}
+
+        {/* Render the search results */}
+        <div className="mt-4">
+          {renderSearchResults()}
+        </div>
+      </>
+    );
+  })()}
 </pre>
+
 
 
 
