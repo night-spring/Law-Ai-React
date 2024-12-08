@@ -22,7 +22,8 @@ const BareActs = () => {
   const [isFetching, setIsFetching] = useState(false); // Loading state
   const [fetchError, setFetchError] = useState(null);  // Error state
   const [results, setResults] = useState([]);          // Results state
-
+  const [showPdfPreview, setShowPdfPreview] = useState(false); // Control modal visibility
+  const [pdfBlobUrl, setPdfBlobUrl] = useState(null); // Blob URL for the PDF preview
   const [filteredPdfs, setFilteredPdfs] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false); // Tracks loading state
   const [alertMessage, setAlertMessage] = useState(null);           // Stores search results
@@ -178,7 +179,49 @@ const BareActs = () => {
       setPdfLoading(false); // Hide the loading indicator once download completes or fails
     }
   };
-
+  const handlePreviewPdf = async (pdfId) => {
+    setPdfLoading(true); // Show loading indicator
+    setPdfError(null); // Clear any previous errors
+  
+    try {
+      // Fetch the PDF file for preview using the pdfId
+      const response = await axios.get(
+        `https://sih-backend-seven.vercel.app/pdfs/${pdfId}/download/`,
+        { responseType: "blob" } // Ensure we get binary PDF data
+      );
+  
+      // Check if the response is a valid PDF (by checking the MIME type)
+      const contentType = response.headers["content-type"];
+      if (contentType && contentType.startsWith("application/pdf")) {
+        // Create a Blob from the response data
+        const blob = new Blob([response.data], { type: "application/pdf" });
+  
+        // Generate a URL for the Blob to use in the iframe
+        const url = URL.createObjectURL(blob);
+        setPdfBlobUrl(url); // Set the Blob URL to display in the modal
+  
+        // Show the modal
+        setShowPdfPreview(true);
+      } else {
+        throw new Error("The fetched document is not a PDF.");
+      }
+  
+    } catch (err) {
+      // Handle errors
+      setPdfError("Failed to fetch PDF data.");
+      console.error("Error fetching PDF:", err);
+    } finally {
+      setPdfLoading(false); // Hide the loading indicator once download completes or fails
+    }
+  };
+  
+  
+  // Close the PDF preview modal
+  const closePreviewModal = () => {
+    setShowPdfPreview(false);  // Hide the preview modal
+    setPdfBlobUrl(null);  // Reset the Blob URL
+  };
+  
 
   const performSearch = async (event) => {  
     event.preventDefault();  
@@ -450,55 +493,79 @@ const BareActs = () => {
               <input
                 type="text"
                 placeholder="Search PDFs"
-                value={pdfSearchQuery}  // State to hold the search input value
-                onChange={handlePdfSearchChange}  // Function to handle input changes
+                value={pdfSearchQuery}
+                onChange={handlePdfSearchChange} // Handle input change
                 className="w-full p-3 text-lg rounded-lg border-2 bg-white text-gray-800 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
               />
             </div>
           </div>
+    
+          {/* If PDFs are loading or error occurred */}
           {pdfLoading ? (
             <p>Loading PDFs...</p>
           ) : pdfError ? (
             <p className="text-red-500">{pdfError}</p>
           ) : (
             <div className="space-y-4">
-              {/* Filter PDFs based on search query */}
-              {pdfs
-                .filter((pdf) => {
-                  if (pdfSearchQuery === "") {
-                    return true;  // If search query is empty, show all PDFs
-                  }
-                  // If search query is not empty, filter by act_name or description
-                  return (
-                    pdf.act_name.toLowerCase().includes(pdfSearchQuery.toLowerCase()) ||
-                    pdf.description.toLowerCase().includes(pdfSearchQuery.toLowerCase())
-                  );
-                })
-                .map((pdf) => (
-                  <div
-                    key={pdf.id}
-                    className="p-4 bg-white border border-gray-300 rounded-lg shadow-md flex justify-between items-center"
-                  >
-                    <div className="pdf-info flex-1">
-                      <h4 className="text-xl font-semibold text-blue-800">
-                        {pdf.act_name} {/* Display the name of the PDF */}
-                      </h4>
-                      <p className="text-md text-gray-700">{pdf.description}</p> {/* Display the description */}
-                    </div>
-                    <div className="pdf-action ml-4">
-                      {/* Button to download the PDF */}
-                      <button
-                        onClick={() => handleDownloadPdf(pdf.id)} // Trigger PDF download
-                        className="p-2 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-                      >
-                        Download PDF
-                      </button>
-                    </div>
+              {/* Display filtered PDFs */}
+              {filteredPdfs.map((pdf) => (
+                <div
+                  key={pdf.id}
+                  className="p-4 bg-white border border-gray-300 rounded-lg shadow-md flex justify-between items-center"
+                >
+                  <div className="pdf-info flex-1">
+                    <h4 className="text-xl font-semibold text-blue-800">{pdf.act_name}</h4>
+                    <p className="text-md text-gray-700">{pdf.description}</p>
                   </div>
-                ))}
+                  <div className="pdf-action ml-4">
+                    {/* Preview Button */}
+                    <button
+                      onClick={() => handlePreviewPdf(pdf.id)} // Show PDF preview
+                      className="p-2 bg-green-600 text-white font-medium rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-300 mr-4"
+                    >
+                      Preview PDF
+                    </button>
+                    {/* Download Button */}
+                    <button
+                      onClick={() => handleDownloadPdf(pdf.id)} // Download PDF
+                      className="p-2 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 mt-2"
+                    >
+                      Download PDF
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
+    
+          {/* PDF Preview Modal */}
+          {showPdfPreview && pdfBlobUrl && (
+  <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+   <div className="bg-white p-6 rounded-lg max-w-4xl w-full h-[80vh] relative overflow-hidden">
+  <button
+    onClick={closePreviewModal}
+    className="absolute top-4 right-4 text-white bg-red-600 p-2 rounded-full hover:bg-red-700"
+  >
+    <span className="material-icons">close</span>
+  </button>
+  <h3 className="text-2xl font-semibold text-blue-900 mb-4">PDF Preview</h3>
+  <div className="w-full h-full">
+    {/* Display the PDF in an iframe */}
+    <iframe
+      src={pdfBlobUrl}
+      title="PDF Preview"
+      className="w-full h-full border border-gray-300 rounded-lg"
+      style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+    />
+  </div>
+</div>
+
+  </div>
+)}
+
+
         </div>
+      
     )}
     {showButton && (
       <button
