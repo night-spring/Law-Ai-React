@@ -242,7 +242,7 @@ const Database = () => {
           </div>
         )}
       </main>
-     {/*Footer section*/}
+      {/*Footer section*/}
       <Footer />
       {showScrollBtn && (
         <button
@@ -354,16 +354,35 @@ const Database = () => {
                   value={editedCaseData.status || activeCase.status || ''}
                   onChange={handleInputChange}
                   className={`w-full p-2 mt-2 border rounded-md bg-white appearance-none 
-                    ${editedCaseData.status === 'assigned' || activeCase.status === 'assigned' ? 'bg-green-100' : ''}
-                    ${editedCaseData.status === 'under-investigation' || activeCase.status === 'under-investigation' ? 'bg-yellow-100' : ''}
-                    ${editedCaseData.status === 'closed' || activeCase.status === 'closed' ? 'bg-red-100' : ''}`}
-                              >
-                  <option value="assigned" className="bg-green-100">Assigned</option>
-                  <option value="under-investigation" className="bg-yellow-100">Under Investigation</option>
-                  <option value="closed" className="bg-red-100">Closed</option>
+                  ${editedCaseData.status === 'assigned' || activeCase.status === 'assigned' ? 'bg-green-200' : ''}
+                  ${editedCaseData.status === 'under-investigation' || activeCase.status === 'under-investigation' ? 'bg-yellow-100' : ''}
+                  ${editedCaseData.status === 'closed' || activeCase.status === 'closed' ? 'bg-red-100' : ''}`}
+                >
+                  <option
+                    value="assigned"
+                    className={`${(editedCaseData.status === 'assigned' || activeCase.status === 'assigned') ? 'bg-green-200' : ''
+                      }`}
+                  >
+                    Assigned
+                  </option>
+                  <option
+                    value="under-investigation"
+                    className={`${(editedCaseData.status === 'under-investigation' || activeCase.status === 'under-investigation') ? 'bg-yellow-100' : ''
+                      }`}
+                  >
+                    Under Investigation
+                  </option>
+                  <option
+                    value="closed"
+                    className={`${(editedCaseData.status === 'closed' || activeCase.status === 'closed') ? 'bg-red-100' : ''
+                      }`}
+                  >
+                    Closed
+                  </option>
                 </select>
+
               </div>
-              
+
               {isEditing && (
                 <div className="mt-4">
                   <button
