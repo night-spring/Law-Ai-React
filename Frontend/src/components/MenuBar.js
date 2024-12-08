@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'; // Use NavLink for active styling
 import { motion } from 'framer-motion'; // Import Framer Motion
 import './component-styles/MenuBar.css'; // External CSS for styling
 
-const MenuBar = () => { 
+const MenuBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State for menu open/close
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State for login status
   const [name, setName] = useState(''); // State for user's name
@@ -37,7 +37,7 @@ const MenuBar = () => {
         <span className="material-icons">menu</span>
       </div>
 
-       {isMenuOpen && (
+      {isMenuOpen && (
         <motion.nav
           className="menu-options"
           initial="hidden"
@@ -52,12 +52,12 @@ const MenuBar = () => {
           }}
         >
           <div className="menu-header flex justify-between items-center mb-6">
-          <NavLink to="/" className="text-white text-2xl font-bold">
-        LawAI
-      </NavLink>
+            <NavLink to="/" className="text-white text-2xl font-bold">
+              LawAI
+            </NavLink>
             <span className="material-icons text-white text-3xl">gavel</span>
           </div>
-      
+
           {/* Display User info if logged in */}
           {isLoggedIn && (
             <div
@@ -82,19 +82,19 @@ const MenuBar = () => {
 
           <nav className="menu-nav">
             <ul>
-              <li><NavLink to="/home/query" activeClassName="active">AI Lawyer</NavLink></li>
+              <li><NavLink to="/query" activeClassName="active">AI Lawyer</NavLink></li>
               <li><NavLink to="/bareacts" activeClassName="active">Bare Acts</NavLink></li>
 
-              <li><NavLink to="/home/database" activeClassName="active">Database</NavLink></li>
+              <li><NavLink to="/database" activeClassName="active">Database</NavLink></li>
               <li><NavLink to="/fir" activeClassName="active">FIR Builder</NavLink></li>
               <li>
                 {isLoggedIn ? (
-                  <NavLink to="/home/login" activeClassName="active">Logged In</NavLink>
+                  <NavLink to="/login" activeClassName="active">Logged In</NavLink>
                 ) : (
-                  <NavLink to="/home/login" activeClassName="active">Login</NavLink>
+                  <NavLink to="/login" activeClassName="active">Login</NavLink>
                 )}
               </li>
-              <li><NavLink to="/home/settings" activeClassName="active">Settings</NavLink></li>
+              <li><NavLink to="/settings" activeClassName="active">Settings</NavLink></li>
             </ul>
           </nav>
         </motion.nav>

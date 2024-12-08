@@ -7,7 +7,7 @@ const KeyFeatures = ({ theme }) => {
         Key Features
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 px-4">
-        
+
         {/* Feature Card 1 */}
         <div className={`feature-card rounded-lg p-8 shadow-lg transform transition-all hover:scale-105 hover:shadow-2xl ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}>
           <div className="icon bg-blue-500 text-white p-4 rounded-full mb-6 w-16 h-16 flex items-center justify-center mx-auto">

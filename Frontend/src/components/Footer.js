@@ -6,7 +6,7 @@ const Footer = () => {
     <footer className="bg-gradient-to-r from-blue-900 to-blue-600 text-white py-4 mt-8">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-center md:items-start space-y-6 md:space-y-0 md:space-x-6">
-          
+
           {/* Logo and copyright section */}
           <div className="text-center md:text-left">
             <p className="text-2xl font-semibold text-yellow-400 mb-1">

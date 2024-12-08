@@ -66,7 +66,7 @@ const Sidebar = () => {
               alt="Emblem of India"
               className="h-12"
             />
-            
+
             {/* Help Button */}
             <button
               className="bg-white text-blue-800 px-4 py-2 rounded-lg text-sm font-semibold shadow-md hover:shadow-lg transform transition hover:scale-105"
@@ -96,10 +96,10 @@ const Sidebar = () => {
       {/* Sidebar Navigation */}
       <nav className="sidebarrr-nav bg-gradient-to-r from-blue-800 to-blue-600 text-white text-sm py-4 shadow-md sticky top-0 z-50">
         <div className="sidebar-contentcontainer mx-auto px-6 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-10">
-        
+
           {/* AI Lawyer Link */}
           <NavLink
-            to="/home/query"
+            to="/query"
             className={({ isActive }) =>
               classNames(
                 'text-lg font-medium hover:text-yellow-300 hover:underline underline-offset-4 transition duration-200',
@@ -109,11 +109,11 @@ const Sidebar = () => {
           >
             {language === 'English' ? 'AI Lawyer' :
               language === 'Hindi' ? 'एआई वकील' :
-              language === 'Bengali' ? 'এআই আইনজীবী' :
-              language === 'Tamil' ? 'ஏ.ஐ. வழக்குரைஞர்' :
-              language === 'Telugu' ? 'ఏ.ఐ. న్యాయవాది' :
-              language === 'Marathi' ? 'ए.आय. वकील' :
-              'AI Lawyer'}
+                language === 'Bengali' ? 'এআই আইনজীবী' :
+                  language === 'Tamil' ? 'ஏ.ஐ. வழக்குரைஞர்' :
+                    language === 'Telugu' ? 'ఏ.ఐ. న్యాయవాది' :
+                      language === 'Marathi' ? 'ए.आय. वकील' :
+                        'AI Lawyer'}
           </NavLink>
 
           {/* Bare Acts Link */}
@@ -128,16 +128,16 @@ const Sidebar = () => {
           >
             {language === 'English' ? 'Bare Acts' :
               language === 'Hindi' ? 'नंगे कृत्य' :
-              language === 'Bengali' ? 'নগ্ন আইন' :
-              language === 'Tamil' ? 'மரபுவழி சட்டங்கள்' :
-              language === 'Telugu' ? 'నగ్న చట్టాలు' :
-              language === 'Marathi' ? 'नग्न कायदे' :
-              'Bare Acts'}
+                language === 'Bengali' ? 'নগ্ন আইন' :
+                  language === 'Tamil' ? 'மரபுவழி சட்டங்கள்' :
+                    language === 'Telugu' ? 'నగ్న చట్టాలు' :
+                      language === 'Marathi' ? 'नग्न कायदे' :
+                        'Bare Acts'}
           </NavLink>
 
           {/* Database Link */}
           <NavLink
-            to="/home/database"
+            to="/database"
             className={({ isActive }) =>
               classNames(
                 'text-lg font-medium hover:text-yellow-300 hover:underline underline-offset-4 transition duration-200',
@@ -147,11 +147,11 @@ const Sidebar = () => {
           >
             {language === 'English' ? 'Database' :
               language === 'Hindi' ? 'डेटाबेस' :
-              language === 'Bengali' ? 'ডাটাবেস' :
-              language === 'Tamil' ? 'தரவுத்தளம்' :
-              language === 'Telugu' ? 'డేటాబేస్' :
-              language === 'Marathi' ? 'डेटाबेस' :
-              'Database'}
+                language === 'Bengali' ? 'ডাটাবেস' :
+                  language === 'Tamil' ? 'தரவுத்தளம்' :
+                    language === 'Telugu' ? 'డేటాబేస్' :
+                      language === 'Marathi' ? 'डेटाबेस' :
+                        'Database'}
           </NavLink>
 
           {/* FIR Builder Link */}
@@ -166,16 +166,16 @@ const Sidebar = () => {
           >
             {language === 'English' ? 'FIR Builder' :
               language === 'Hindi' ? 'एफआईआर निर्माता' :
-              language === 'Bengali' ? 'এফআইআর নির্মাতা' :
-              language === 'Tamil' ? 'ஃபைருக்கான கட்டுமானம்' :
-              language === 'Telugu' ? 'ఎఫ్ఐఆర్ నిర్మాణం' :
-              language === 'Marathi' ? 'एफआयआर बिल्डर' :
-              'FIR Builder'}
+                language === 'Bengali' ? 'এফআইআর নির্মাতা' :
+                  language === 'Tamil' ? 'ஃபைருக்கான கட்டுமானம்' :
+                    language === 'Telugu' ? 'ఎఫ్ఐఆర్ నిర్మాణం' :
+                      language === 'Marathi' ? 'एफआयआर बिल्डर' :
+                        'FIR Builder'}
           </NavLink>
 
           {/* Settings Link */}
           <NavLink
-            to="/home/settings"
+            to="/settings"
             className={({ isActive }) =>
               classNames(
                 'text-lg font-medium hover:text-yellow-300 hover:underline underline-offset-4 transition duration-200',
@@ -185,16 +185,16 @@ const Sidebar = () => {
           >
             {language === 'English' ? 'Settings' :
               language === 'Hindi' ? 'सेटिंग्स' :
-              language === 'Bengali' ? 'সেটিংস' :
-              language === 'Tamil' ? 'அமைப்புகள்' :
-              language === 'Telugu' ? 'సెట్టింగ్‌లు' :
-              language === 'Marathi' ? 'सेटिंग्ज' :
-              'Settings'}
+                language === 'Bengali' ? 'সেটিংস' :
+                  language === 'Tamil' ? 'அமைப்புகள்' :
+                    language === 'Telugu' ? 'సెట్టింగ్‌లు' :
+                      language === 'Marathi' ? 'सेटिंग्ज' :
+                        'Settings'}
           </NavLink>
 
           {/* Conditional Rendering of Avatar or Login */}
           <NavLink
-            to="/home/login"
+            to="/login"
             className={({ isActive }) =>
               classNames(
                 'text-lg font-medium hover:text-yellow-300 hover:underline underline-offset-4 transition duration-200',
@@ -210,12 +210,12 @@ const Sidebar = () => {
               />
             ) : (
               language === 'English' ? 'Login' :
-              language === 'Hindi' ? 'लॉगिन' :
-              language === 'Bengali' ? 'লগইন' :
-              language === 'Tamil' ? 'உள்நுழைவு' :
-              language === 'Telugu' ? 'లాగిన్' :
-              language === 'Marathi' ? 'लॉगिन' :
-              'Login'
+                language === 'Hindi' ? 'लॉगिन' :
+                  language === 'Bengali' ? 'লগইন' :
+                    language === 'Tamil' ? 'உள்நுழைவு' :
+                      language === 'Telugu' ? 'లాగిన్' :
+                        language === 'Marathi' ? 'लॉगिन' :
+                          'Login'
             )}
           </NavLink>
 

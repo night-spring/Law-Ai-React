@@ -22,10 +22,10 @@ function App() {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/home" element={<Landing />} />
-            <Route path="/home/settings" element={<Settings />} />
-            <Route path="/home/login" element={<Login />} />
-            <Route path="/home/database" element={<Database />} />
-            <Route path="/home/query" element={<Query />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/database" element={<Database />} />
+            <Route path="/query" element={<Query />} />
             <Route path="/bareacts" element={<BareActs />} />
             <Route path="/download" element={<Download />} />
             <Route path="/team" element={<Team />} />
