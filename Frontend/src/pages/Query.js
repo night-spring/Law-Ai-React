@@ -171,15 +171,23 @@ const Query = () => {
 
  
 
-  const handleAddTag = () => {
-    if (tagInput.trim() && !caseData.tags.includes(tagInput.trim())) {
+  const handleAddTag = (tag) => {
+    if (!caseData.tags.includes(tag)) {
       setCaseData((prevData) => ({
         ...prevData,
-        tags: [...prevData.tags, tagInput.trim()],
+        tags: [...prevData.tags, tag],
       }));
     }
-    setTagInput('');
   };
+  const handleToggleTag = (tag) => {
+    setCaseData((prevData) => ({
+      ...prevData,
+      tags: prevData.tags.includes(tag)
+        ? prevData.tags.filter((t) => t !== tag) // Remove tag if already selected
+        : [...prevData.tags, tag], // Add tag if not selected
+    }));
+  };
+  
 
   const handleRemoveTag = (index) => {
     setCaseData((prevData) => ({
@@ -551,45 +559,30 @@ const Query = () => {
   />
 </div>
 
-            {/* Tags Section */}
-            <div className="mb-4">
-              <label htmlFor="tags" className="block text-gray-700 font-medium">
-                Tags
-              </label>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="text"
-                  id="tags"
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  className="flex-grow p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-                />
-                <button
-                  type="button"
-                  onClick={handleAddTag}
-                  className="add-tag-btn bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition duration-200"
-                >
-                  Add Tag
-                </button>
-              </div>
-              <div className="tags-list mt-2 flex flex-wrap gap-2">
-                {caseData.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="tag-item bg-blue-100 text-blue-600 px-3 py-1 rounded-lg text-sm flex items-center space-x-2"
-                  >
-                    <span>{tag}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveTag(index)}
-                      className="remove-tag-btn text-red-500 hover:text-red-700 transition duration-200"
-                    >
-                      &times;
-                    </button>
-                  </span>
-                ))}
-              </div>
-            </div>
+    {/* Tags Section */}
+<div className="mb-4">
+  <label htmlFor="tags" className="block text-gray-700 font-medium">
+    Tags
+  </label>
+  <div className="tags-options mt-2 flex flex-wrap gap-2">
+    {['Theft', 'Domestic violence', 'Cyber crime', 'Assault/Rape', 'Missing'].map((tag, index) => (
+      <button
+        key={index}
+        type="button"
+        onClick={() => handleToggleTag(tag)}
+        className={`tag-bubble ${
+          caseData.tags.includes(tag)
+            ? 'bg-blue-600 text-white'
+            : 'bg-blue-100 text-blue-600'
+        } px-3 py-1 rounded-lg text-sm hover:bg-blue-600 hover:text-white transition duration-200`}
+      >
+        {tag}
+      </button>
+    ))}
+  </div>
+</div>
+
+
           </div>
 
           
