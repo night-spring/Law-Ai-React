@@ -146,7 +146,7 @@ const Landing = () => {
           {/* Call-to-Action Buttons */}
           <div className="flex justify-center space-x-4 sm:space-x-6">
             <a
-              href="/home/query"
+              href="/query"
               className="bg-yellow-400 text-blue-900 px-8 sm:px-10 py-3 sm:py-4 rounded-full text-sm sm:text-lg font-semibold shadow-lg hover:bg-yellow-500 hover:shadow-xl transition-all duration-300"
             >
               Get Started
