@@ -8,7 +8,11 @@ import '../styles/Query.css';
 
 const Query = () => {
   const [query, setQuery] = useState('');
-  const [response, setResponse] = useState('Response will appear here...');
+  const [response, setResponse] = useState(
+    `<h2 class="text-xl font-semibold mb-4">Detailed Section</h2>
+     <div>This Section will display a detailed Description of What Acts are applicable in the FIR query you entered.</div>`
+  );
+
   const [isListening, setIsListening] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -29,7 +33,7 @@ const Query = () => {
     tags: [],
     status: '', // New field for status
     description: '' // New field for description
-  }); 
+  });
 
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const recognition = useMemo(() => {
@@ -70,69 +74,89 @@ const Query = () => {
         return text; // Default to English if language is not recognized
     }
   };
+  const handleSearch = async (e, act, query) => {
+    setLoading(true);
+    setError(null);
 
-  const handleSearch = async (e, actName, query) => {
-    e.preventDefault(); // Prevent default button behavior
-    setLoading(true); // Indicate loading state
-    setError(null); // Clear any existing errors
-
-    // Ensure both actName and query are provided
-    if (!actName) {
-      setError("An act type is required to perform the search.");
-      setLoading(false);
-      return;
-    }
-    try 
-    {
-      // Make the API call
+    try {
       const response = await axios.post(
         "https://sih-backend-seven.vercel.app/search/",
         {
-          query: query || "", // Include query if present, else empty string
-          act: actName, // Pass the act name
+          query, // Use the dynamically passed query value
+          act,   // Use the dynamically passed act value
         },
         {
           headers: {
-            "Content-Type": "application/json", // Set Content-Type header
+            "Content-Type": "application/json", // Explicitly set Content-Type header
           },
         }
       );
 
-      // Update the results
-      setSearchResults(response.data.data);
+      // Directly set the response data
+      setSearchResults(response.data); // Save the entire response object
     } catch (err) {
-      // Handle any API errors
       setError("An error occurred while fetching results.");
       console.error(err);
     } finally {
-      setLoading(false); // End loading state
+      setLoading(false);
     }
   };
 
   const renderSearchResults = () => {
     if (loading) {
-      return <div>Loading...</div>;
+      return <div className="text-lg text-gray-500">Loading...</div>;
     }
 
     if (error) {
-      return <div className="text-red-500">{error}</div>;
+      return <div className="text-red-500 font-semibold">{error}</div>;
     }
 
-    // Ensure searchResults is not empty or invalid
-    if (!Array.isArray(searchResults) || searchResults.length === 0) {
-      return <div>No results found.</div>;
+    // If no data is returned
+    if (!searchResults || Object.keys(searchResults).length === 0) {
+      return (
+        <div>
+          <h3 className="text-xl font-semibold mb-2">Summary Section</h3>
+          <div className="text-gray-600">This Section will display all the Summary of the Acts and the Sections applicable for your requested query.</div>
+        </div>
+      );
     }
+
+    const { section, title, description } = searchResults.data;
 
     return (
-      <div>
-        <h3 className="text-xl font-semibold mb-2">Search Results:</h3>
-        <pre className="bg-gray-100 p-4 rounded-lg">
-          {/* Display the raw JSON response */}
-          {JSON.stringify(searchResults, null, 2)}
-        </pre>
+      <div className="p-6 bg-white shadow-md rounded-lg">
+        <h3 className="text-xl font-semibold text-gray-800 mb-4">Search Results:</h3>
+
+        {/* Display section */}
+        <div className="mb-4">
+          <span className="text-sm font-semibold text-gray-500">Section:</span>
+          <div className="text-lg text-blue-600">{section}</div>
+        </div>
+
+        {/* Display title */}
+        <div className="mb-4">
+          <span className="text-sm font-semibold text-gray-500">Title:</span>
+          <div className="text-lg font-medium text-gray-800">{title}</div>
+        </div>
+
+        {/* Display description */}
+        <div>
+          <span className="text-sm font-semibold text-gray-500">Description:</span>
+          <div
+            className="bg-gray-100 p-4 rounded-lg text-gray-700"
+            style={{ whiteSpace: 'pre-wrap' }} // Preserve newlines in description
+          >
+            {description}
+          </div>
+        </div>
       </div>
     );
   };
+
+
+
+
+
 
   useEffect(() => {
     recognition.onresult = (event) => {
@@ -341,20 +365,158 @@ const Query = () => {
   return (
     <div className="query-page-container">
       {isMobile ? <Menubar /> : <Sidebar />}
-
+  
       <div className="query-page-main-content bg-gradient-to-r from-gray-100 to-white p-8 rounded-xl shadow-lg min-h-[70vh]">
         <h2 className="query-page-title text-4xl font-semibold text-blue-900 text-center mb-8 mt-4">
           Ask a Query
         </h2>
-
+  
         {/* How it Works Modal */}
         <HowItWorksModal />
-        <div className="flex w-full mt-8">
+        <div className="flex w-full mt-8 relative">
+        {isLoading && (
+    <div className="absolute inset-0 bg-white  flex justify-center items-center z-[9999] rounded-lg">
+      <div className="spinner mb-4"></div>
+      <p className="loading-message text-lg text-black">Processing your query, please wait...</p>
+    </div>
+  )}
+
+  
           {/* Left Section */}
           <div
-            className={`query-response-box bg-white p-8 rounded-lg shadow-md border border-gray-300 transition-all duration-500 ${!isLoading && !error && response ? 'flex-grow' : 'w-full'
-              }`}
-            style={{ minHeight: '200px', marginRight: '10px' }} // Margin-right to create a gap
+            className="query-response-box bg-white p-8 rounded-lg shadow-md border border-gray-300"
+            style={{
+              minHeight: '200px',
+              width: '48%', // 50% width minus a small gap
+              marginRight: '2%', // Small gap between left and right sections
+            }}
+          >
+            {/* Extract and display only multi-digit numbers (excluding single-digit numbers) */}
+            <pre
+              className="text-gray-800 font-medium leading-relaxed break-words whitespace-pre-wrap"
+              style={{
+                fontFamily: '"Arial", sans-serif',
+                fontSize: '1.1rem',
+                lineHeight: '1.6',
+              }}
+            >
+              {(() => {
+                // If response is empty, show default heading and paragraph
+                if (!response) {
+                  return (
+                    <>
+                      <h2
+                        className="text-lg font-bold mb-2"
+                        style={{
+                          fontFamily: '"Arial", sans-serif',
+                          color: '#333',
+                        }}
+                      >
+                        Summary Section will appear here
+                      </h2>
+                      <p
+                        className="text-sm text-gray-700"
+                        style={{
+                          fontFamily: '"Arial", sans-serif',
+                          lineHeight: '1.4',
+                        }}
+                      >
+                        This section will list all the acts and sections applicable. Details will appear on clicking each of the section buttons.
+                      </p>
+                    </>
+                  );
+                }
+                const regex = /\d+/g;
+                let matches = [];
+                let match;
+  
+                // Extract all matches from inputString
+                while ((match = regex.exec(response || "")) !== null) {
+                  matches.push(match[0]);
+                }
+                let lastAct = null;
+                let result = [];
+                let queries = [];
+                // Act names mapping (ipc, crpc, etc.)
+                const actNames = {
+                  1860: 'ipc',    // Indian Penal Code
+                  1973: 'crpc',   // Code of Criminal Procedure
+                  1989: 'bns',    // The Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act
+                  1955: 'iea',    // The Protection of Civil Rights Act
+                  1908: 'cpc',    // Code of Civil Procedure
+                  1988: 'mva',    // Motor Vehicles Act
+                };
+                matches.forEach((num) => {
+                  num = num.trim();
+  
+                  if (num.length === 4) {
+                    // If 'act' is found, process the previous act-query pair
+                    if (lastAct) {
+                      if (queries.length === 0) {
+                        result.push({ act: lastAct, query: null });
+                      } else {
+                        queries.forEach(query => {
+                          result.push({ act: lastAct, query });
+                        });
+                      }
+                    }
+                    lastAct = num;  // Update the act to the current number
+                    queries = [];   // Reset queries for new act
+                  } else if (num.length === 3) {
+                    queries.push(num);  // Add the query number to the list
+                  }
+                });
+  
+                // Add the final act-query pair if necessary
+                if (lastAct) {
+                  if (queries.length === 0) {
+                    result.push({ act: lastAct, query: null });
+                  } else {
+                    queries.forEach(query => {
+                      result.push({ act: lastAct, query });
+                    });
+                  }
+                }
+  
+                const renderButtons = result.map((item, index) => {
+                  const actName = actNames[item.act]; // Map act to its name
+                  if (!actName) return null; // Skip items without valid act mappings
+  
+                  return (
+                    <button
+                      key={index}
+                      onClick={(e) => handleSearch(e, actName, item.query)}
+                      className="bg-blue-100 text-blue-600 px-3 py-1 rounded-lg text-sm hover:bg-blue-600 hover:text-white transition duration-200 mb-1"
+                    >
+                      {`ACT : ${actName.toUpperCase()}, SECTION :${item.query ? ` ${item.query}` : ""}`}
+                    </button>
+                  );
+                });
+  
+                return (
+                  <>
+                    <div className="flex flex-wrap gap-2">
+                      {renderButtons}
+                    </div>
+  
+                    <div className="mt-4">
+                      <button onClick={(e) => handleSearch(e)}>Search</button>
+                      {renderSearchResults()}
+                    </div>
+                  </>
+                );
+              })()}
+            </pre>
+          </div>
+  
+          {/* Right Section */}
+          <div
+            className={`query-response-box bg-white p-8 rounded-lg shadow-md border border-gray-300 transition-all duration-500 ${!isLoading && !error && response ? 'flex-grow' : 'w-full'}`}
+            style={{
+              minHeight: '200px',
+              width: '48%', // 50% width minus a small gap
+              marginLeft: '2%', // Small gap between left and right sections
+            }}
           >
             {isLoading ? (
               <div className="flex flex-col justify-center items-center min-h-full">
@@ -365,7 +527,9 @@ const Query = () => {
               <p className="error-message text-lg text-red-600">{error}</p>
             ) : (
               <pre
-                dangerouslySetInnerHTML={{ __html: response }}
+                dangerouslySetInnerHTML={{
+                  __html: response || "Detailed description of the laws and the sections applicable to the entered case will appear here."
+                }}
                 className="text-gray-800 font-medium leading-relaxed break-words whitespace-pre-wrap"
                 style={{
                   fontFamily: '"Arial", sans-serif',
@@ -375,115 +539,9 @@ const Query = () => {
               ></pre>
             )}
           </div>
-          {/* Right Section */}
-          {!isLoading && !error && response && (
-            <div
-              className="query-response-box bg-white p-8 rounded-lg shadow-md border border-gray-300 flex-grow"
-              style={{ minHeight: '200px', minWidth: '50%', marginLeft: '10px' }} // Added margin-left to maintain gap
-            >
-              {/* Extract and display only multi-digit numbers (excluding single-digit numbers) */}
-              <pre
-                className="text-gray-800 font-medium leading-relaxed break-words whitespace-pre-wrap"
-                style={{
-                  fontFamily: '"Arial", sans-serif',
-                  fontSize: '1.1rem',
-                  lineHeight: '1.6',
-                }}
-              >
-                {(() => {
-                  // Regular expression to capture all multi-digit numbers (sections)
-                  const regex = /\d+/g;
-                  let matches = [];
-                  let match;
-
-                  // Extract all matches from inputString
-                  while ((match = regex.exec(response || "")) !== null) {
-                    matches.push(match[0]);
-                  }
-                  let lastAct = null;
-                  let result = [];
-                  let queries = [];
-                  // Act names mapping (ipc, crpc, etc.)
-                  const actNames = {
-                    1860: 'ipc',    // Indian Penal Code
-                    1973: 'crpc',   // Code of Criminal Procedure
-                    1989: 'bns',    // The Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act
-                    1955: 'iea',    // The Protection of Civil Rights Act
-                    1908: 'cpc',    // Code of Civil Procedure
-                    1988: 'mva',    // Motor Vehicles Act
-                  };
-                  matches.forEach((num) => {
-                    num = num.trim();
-
-                    if (num.length === 4) {
-                      // If 'act' is found, process the previous act-query pair
-                      if (lastAct) {
-                        if (queries.length === 0) {
-                          result.push({ act: lastAct, query: null });
-                        } else {
-                          queries.forEach(query => {
-                            result.push({ act: lastAct, query });
-                          });
-                        }
-                      }
-                      lastAct = num;  // Update the act to the current number
-                      queries = [];   // Reset queries for new act
-                    } else if (num.length === 3) {
-                      queries.push(num);  // Add the query number to the list
-                    }
-                  });
-
-                  // Add the final act-query pair if necessary
-                  if (lastAct) {
-                    if (queries.length === 0) {
-                      result.push({ act: lastAct, query: null });
-                    } else {
-                      queries.forEach(query => {
-                        result.push({ act: lastAct, query });
-                      });
-                    }
-                  }
-
-                  const renderButtons = result.map((item, index) => {
-                    const actName = actNames[item.act]; // Map act to its name
-                    if (!actName) return null; // Skip items without valid act mappings
-                    // Check if actName and item.query are correctly assigned before passing to handleSearch
-                    console.log("Act Name:", actName);
-                    console.log("Query:", item.query);
-                    return (
-                      <button
-                        key={index}
-                        onClick={(e) => {
-                          console.log("Button clicked");
-                          // Pass both actName and item.query to handleSearch
-                          handleSearch(e, actName, item.query); // Act and query passed here
-                        }}
-                        className="bg-blue-100 text-blue-600 px-3 py-1 rounded-lg text-sm hover:bg-blue-600 hover:text-white transition duration-200 mb-1 block"
-                      >
-                        {/* Display both actName and item.query in the button */}
-                        {`${actName}${item.query ? ` ${item.query}` : ""}`}
-                      </button>
-                    );
-                  });
-
-
-                  return (
-                    <>
-                      {/* Render the act-query buttons */}
-                      {renderButtons}
-
-                      {/* Render the search results */}
-                      <div className="mt-4">
-                        {renderSearchResults()}
-                      </div>
-                    </>
-                  );
-                })()}
-              </pre>
-            </div>
-          )}
         </div>
-
+    
+  
 
         {/*Query Submit Section*/}
         <form
@@ -520,7 +578,7 @@ const Query = () => {
           </div>
         </form>
 
-          {/*Case Add to Database Popup*/}
+        {/*Case Add to Database Popup*/}
         {showPopup && (
           <div
             className="popup-alert fixed top-36 margin-top-20 right-5 bg-blue-50 border-l-4 border-blue-600 text-blue-800 p-6 rounded-lg shadow-xl cursor-pointer max-w-xs min-w-[250px] min-h-[80px] z-[10000]"
@@ -639,8 +697,8 @@ const Query = () => {
                         type="button"
                         onClick={() => handleToggleTag(tag)}
                         className={`tag-bubble ${caseData.tags.includes(tag)
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-blue-100 text-blue-600'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-blue-100 text-blue-600'
                           } px-3 py-1 rounded-lg text-sm hover:bg-blue-600 hover:text-white transition duration-200`}
                       >
                         {tag}
