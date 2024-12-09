@@ -90,6 +90,7 @@ const Database = () => {
           applicableArticle: editedCaseData.applicableArticle,
           description: editedCaseData.description,
           status: editedCaseData.status,
+         
         }
         : caseItem
     );
@@ -103,8 +104,34 @@ const Database = () => {
       ...prevData,
       [name]: value, // Always update the edited data with the current input value
     }));
+    if (name === 'tags') {
+      setEditedCaseData((prevData) => ({
+        ...prevData,
+        [name]: value, // Directly update the tags field
+      }));
+    } else {
+      setEditedCaseData((prevData) => ({
+        ...prevData,
+        [name]: value, // Update other fields as usual
+      }));
+    }
   };
-
+  const handleRemoveTag = (index) => {
+    const updatedTags = editedCaseData.tags
+      .replace(/[\[\]']+/g, '') // Clean up the tag string
+      .split(',')
+      .filter((_, i) => i !== index) // Remove the tag at the clicked index
+      .join(','); // Join tags back into a string
+    setEditedCaseData({ ...editedCaseData, tags: updatedTags }); // Update the state
+  };
+  
+  const handleAddTag = () => {
+    const newTag = prompt('Enter a new tag:'); // Simple prompt to add a new tag
+    if (newTag) {
+      const updatedTags = `${editedCaseData.tags ? editedCaseData.tags + ',' : ''}${newTag.trim()}`;
+      setEditedCaseData({ ...editedCaseData, tags: updatedTags }); // Update the state with the new tag
+    }
+  };
   const saveCaseChanges = () => {
     // Ensure all required fields are filled
     if (!editedCaseData.caseHeading || !editedCaseData.query || !editedCaseData.status) {
@@ -131,6 +158,10 @@ const Database = () => {
     if (editedCaseData.status !== activeCase.status) {
       updatedData.status = editedCaseData.status;
     }
+    if (editedCaseData.tags !== activeCase.tags) {
+      updatedData.tags = editedCaseData.tags;  // Add tags to updatedData if changed
+    }
+
 
     // Log the request body for debugging
     console.log('Request body:', updatedData);
@@ -314,26 +345,67 @@ const Database = () => {
                 )}
               </div>
               <div>
-                <span className="font-semibold">Tags:</span>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {activeCase.tags ? (
-                    // Split the string into an array and map over it to display tags
-                    activeCase.tags
-                      .replace(/[\[\]']+/g, '')  // Remove brackets and single quotes
-                      .split(',') // Split the string into an array based on commas
-                      .map((tag, index) => (
-                        <span
-                          key={index}
-                          className="bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm flex items-center space-x-2"
-                        >
-                          <span>{tag.trim()}</span> {/* trim spaces */}
-                        </span>
-                      ))
-                  ) : (
-                    <p>No tags available</p>
-                  )}
-                </div>
-              </div>
+  <span className="font-semibold">Tags:</span>
+  {isEditing ? (
+    <div>
+      {/* Display the existing tags as a list with remove option */}
+      <div className="flex flex-wrap gap-2 mb-2">
+        {editedCaseData.tags
+          ? editedCaseData.tags
+              .replace(/[\[\]']+/g, '') // Clean up the tag string
+              .split(',')
+              .map((tag, index) => (
+                <span
+                  key={index}
+                  className="inline-block bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm"
+                >
+                  {tag.trim()}
+                  {/* Cross (x) to remove tag */}
+                  <button
+                    onClick={() =>handleRemoveTag(index)}
+                    className="ml-2 text-blue-600 hover:text-blue-800"
+                  >
+                    &times;
+                  </button>
+                </span>
+              ))
+          : 'No tags available'}
+      </div>
+      {/* Input for new tag */}
+      <input
+        name="tags"
+        value={editedCaseData.tags || activeCase?.tags || ''}
+        onChange={handleInputChange}
+        className="w-full p-2 mt-2 border rounded-md"
+        placeholder="Enter tags, separated by commas"
+      />
+      {/* Plus (+) button to add a new tag */}
+      <button
+        onClick={handleAddTag}
+        className="mt-2 text-blue-600 hover:text-blue-800"
+      >
+        + Add Tag
+      </button>
+    </div>
+  ) : (
+    // Display tags as a list of spans when not in editing mode
+    activeCase?.tags
+      ? activeCase.tags
+          .replace(/[\[\]']+/g, '') // Clean up the tag string
+          .split(',')
+          .map((tag, index) => (
+            <span
+              key={index}
+              className="inline-block bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm mr-2 mb-2"
+            >
+              {tag.trim()}
+            </span>
+          ))
+      : 'No tags available'
+  )}
+</div>
+
+
               <div>
                 <span className="font-semibold">Description:</span>
                 {isEditing ? (
