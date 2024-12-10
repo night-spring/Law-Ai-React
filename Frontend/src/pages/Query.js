@@ -116,7 +116,7 @@ const Query = () => {
       return (
         <div>
           <h3 className="text-xl font-semibold mb-2">Summary Section</h3>
-          <div className="text-gray-600">This Section will display all the Summary of the Acts and the Sections applicable for your requested query.</div>
+          <div className="text-gray-600">This Section will display all the Summary of the Acts and the Sections applicable for your requested query. Details will appear on clicking each of the section buttons.</div>
         </div>
       );
     }
@@ -373,174 +373,166 @@ const Query = () => {
   
         {/* How it Works Modal */}
         <HowItWorksModal />
-        <div className="flex w-full mt-8 relative">
-        {isLoading && (
-    <div className="absolute inset-0 bg-white  flex justify-center items-center z-[9999] rounded-lg">
+        <div className="flex flex-col w-full mt-8 relative">
+  {isLoading && (
+    <div className="absolute inset-0 bg-white flex justify-center items-center z-[9999] rounded-lg">
       <div className="spinner mb-4"></div>
       <p className="loading-message text-lg text-black">Processing your query, please wait...</p>
     </div>
   )}
 
-  
-          {/* Left Section */}
-          <div
-            className="query-response-box bg-white p-8 rounded-lg shadow-md border border-gray-300"
-            style={{
-              minHeight: '200px',
-              width: '48%', // 50% width minus a small gap
-              marginRight: '2%', // Small gap between left and right sections
-            }}
-          >
-            {/* Extract and display only multi-digit numbers (excluding single-digit numbers) */}
-            <pre
-              className="text-gray-800 font-medium leading-relaxed break-words whitespace-pre-wrap"
-              style={{
-                fontFamily: '"Arial", sans-serif',
-                fontSize: '1.1rem',
-                lineHeight: '1.6',
-              }}
-            >
-              {(() => {
-                // If response is empty, show default heading and paragraph
-                if (!response) {
-                  return (
-                    <>
-                      <h2
-                        className="text-lg font-bold mb-2"
-                        style={{
-                          fontFamily: '"Arial", sans-serif',
-                          color: '#333',
-                        }}
-                      >
-                        Summary Section will appear here
-                      </h2>
-                      <p
-                        className="text-sm text-gray-700"
-                        style={{
-                          fontFamily: '"Arial", sans-serif',
-                          lineHeight: '1.4',
-                        }}
-                      >
-                        This section will list all the acts and sections applicable. Details will appear on clicking each of the section buttons.
-                      </p>
-                    </>
-                  );
-                }
-                const regex = /\d+/g;
-                let matches = [];
-                let match;
-  
-                // Extract all matches from inputString
-                while ((match = regex.exec(response || "")) !== null) {
-                  matches.push(match[0]);
-                }
-                let lastAct = null;
-                let result = [];
-                let queries = [];
-                // Act names mapping (ipc, crpc, etc.)
-                const actNames = {
-                  1860: 'ipc',    // Indian Penal Code
-                  1973: 'crpc',   // Code of Criminal Procedure
-                  1989: 'bns',    // The Scheduled Castes and the Scheduled Tribes (Prevention of Atrocities) Act
-                  1955: 'iea',    // The Protection of Civil Rights Act
-                  1908: 'cpc',    // Code of Civil Procedure
-                  1988: 'mva',    // Motor Vehicles Act
-                };
-                matches.forEach((num) => {
-                  num = num.trim();
-  
-                  if (num.length === 4) {
-                    // If 'act' is found, process the previous act-query pair
-                    if (lastAct) {
-                      if (queries.length === 0) {
-                        result.push({ act: lastAct, query: null });
-                      } else {
-                        queries.forEach(query => {
-                          result.push({ act: lastAct, query });
-                        });
-                      }
-                    }
-                    lastAct = num;  // Update the act to the current number
-                    queries = [];   // Reset queries for new act
-                  } else if (num.length === 3) {
-                    queries.push(num);  // Add the query number to the list
-                  }
-                });
-  
-                // Add the final act-query pair if necessary
-                if (lastAct) {
-                  if (queries.length === 0) {
-                    result.push({ act: lastAct, query: null });
-                  } else {
-                    queries.forEach(query => {
-                      result.push({ act: lastAct, query });
-                    });
-                  }
-                }
-  
-                const renderButtons = result.map((item, index) => {
-                  const actName = actNames[item.act]; // Map act to its name
-                  if (!actName) return null; // Skip items without valid act mappings
-  
-                  return (
-                    <button
-                      key={index}
-                      onClick={(e) => handleSearch(e, actName, item.query)}
-                      className="bg-blue-100 text-blue-600 px-3 py-1 rounded-lg text-sm hover:bg-blue-600 hover:text-white transition duration-200 mb-1"
-                    >
-                      {`ACT : ${actName.toUpperCase()}, SECTION :${item.query ? ` ${item.query}` : ""}`}
-                    </button>
-                  );
-                });
-  
-                return (
-                  <>
-                    <div className="flex flex-wrap gap-2">
-                      {renderButtons}
-                    </div>
-  
-                    <div className="mt-4">
-                      <button onClick={(e) => handleSearch(e)}>Search</button>
-                      {renderSearchResults()}
-                    </div>
-                  </>
-                );
-              })()}
-            </pre>
-          </div>
-  
-          {/* Right Section */}
-          <div
-            className={`query-response-box bg-white p-8 rounded-lg shadow-md border border-gray-300 transition-all duration-500 ${!isLoading && !error && response ? 'flex-grow' : 'w-full'}`}
-            style={{
-              minHeight: '200px',
-              width: '48%', // 50% width minus a small gap
-              marginLeft: '2%', // Small gap between left and right sections
-            }}
-          >
-            {isLoading ? (
-              <div className="flex flex-col justify-center items-center min-h-full">
-                <div className="spinner mb-4"></div>
-                <p className="loading-message text-lg text-gray-700">Processing your query, please wait...</p>
-              </div>
-            ) : error ? (
-              <p className="error-message text-lg text-red-600">{error}</p>
-            ) : (
-              <pre
-                dangerouslySetInnerHTML={{
-                  __html: response || "Detailed description of the laws and the sections applicable to the entered case will appear here."
-                }}
-                className="text-gray-800 font-medium leading-relaxed break-words whitespace-pre-wrap"
+  {/* Top Section */}
+  <div
+    className="query-response-box bg-white p-8 rounded-lg shadow-md border border-gray-300 mb-4"
+    style={{
+      minHeight: '200px',
+      width: '100%', // Full width for the top section
+    }}
+  >
+    <pre
+      className="text-gray-800 font-medium leading-relaxed break-words whitespace-pre-wrap"
+      style={{
+        fontFamily: '"Arial", sans-serif',
+        fontSize: '1.1rem',
+        lineHeight: '1.6',
+      }}
+    >
+      {(() => {
+        if (!response) {
+          return (
+            <>
+              <h2
+                className="text-lg font-bold mb-2"
                 style={{
                   fontFamily: '"Arial", sans-serif',
-                  fontSize: '1.1rem',
-                  lineHeight: '1.6',
+                  color: '#333',
                 }}
-              ></pre>
-            )}
-          </div>
-        </div>
-    
+              >
+                Summary Section will appear here
+              </h2>
+              <p
+                className="text-sm text-gray-700"
+                style={{
+                  fontFamily: '"Arial", sans-serif',
+                  lineHeight: '1.4',
+                }}
+              >
+                This section will list all the acts and sections applicable. Details will appear on clicking each of the section buttons.
+              </p>
+            </>
+          );
+        }
+        const regex = /\d+/g;
+        let matches = [];
+        let match;
+
+        while ((match = regex.exec(response || "")) !== null) {
+          matches.push(match[0]);
+        }
+        let lastAct = null;
+        let result = [];
+        let queries = [];
+        const actNames = {
+          1860: 'ipc',
+          1973: 'crpc',
+          1989: 'bns',
+          1955: 'iea',
+          1908: 'cpc',
+          1988: 'mva',
+        };
+        matches.forEach((num) => {
+          num = num.trim();
+
+          if (num.length === 4) {
+            if (lastAct) {
+              if (queries.length === 0) {
+                result.push({ act: lastAct, query: null });
+              } else {
+                queries.forEach((query) => {
+                  result.push({ act: lastAct, query });
+                });
+              }
+            }
+            lastAct = num;
+            queries = [];
+          } else if (num.length === 3) {
+            queries.push(num);
+          }
+        });
+
+        if (lastAct) {
+          if (queries.length === 0) {
+            result.push({ act: lastAct, query: null });
+          } else {
+            queries.forEach((query) => {
+              result.push({ act: lastAct, query });
+            });
+          }
+        }
+
+        const renderButtons = result.map((item, index) => {
+          const actName = actNames[item.act];
+          if (!actName) return null;
+
+          return (
+            <button
+              key={index}
+              onClick={(e) => handleSearch(e, actName, item.query)}
+              className="bg-blue-100 text-blue-600 px-3 py-1 rounded-lg text-sm hover:bg-blue-600 hover:text-white transition duration-200 mb-1"
+            >
+              {`ACT : ${actName.toUpperCase()}, SECTION :${item.query ? ` ${item.query}` : ""}`}
+            </button>
+          );
+        });
+
+        return (
+          <>
+            <div className="flex flex-wrap gap-2">{renderButtons}</div>
+
+            <div className="mt-4">
+              <button onClick={(e) => handleSearch(e)}></button>
+              {renderSearchResults()}
+            </div>
+          </>
+        );
+      })()}
+    </pre>
+  </div>
+
+  {/* Bottom Section */}
+  <div
+    className={`query-response-box bg-white p-8 rounded-lg shadow-md border border-gray-300 transition-all duration-500`}
+    style={{
+      minHeight: '200px',
+      width: '100%', // Full width for the bottom section
+    }}
+  >
+    {isLoading ? (
+      <div className="flex flex-col justify-center items-center min-h-full">
+        <div className="spinner mb-4"></div>
+        <p className="loading-message text-lg text-gray-700">Processing your query, please wait...</p>
+      </div>
+    ) : error ? (
+      <p className="error-message text-lg text-red-600">{error}</p>
+    ) : (
+      <pre
+  dangerouslySetInnerHTML={{
+    __html: (response || "Detailed description of the laws and the sections applicable to the entered case will appear here.")
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Replace **text** with <strong>text</strong>
+      .replace(/\*(.*?)\*/g, '<ul style="padding-left: 20px; list-style-type: disc;"><li>$1</li></ul>') // Replace *text* with a bullet point
+  }}
+  className="text-gray-800 font-medium leading-relaxed break-words whitespace-pre-wrap"
+  style={{
+    fontFamily: '"Arial", sans-serif',
+    fontSize: '1.1rem',
+    lineHeight: '1.6',
+  }}
+></pre>
+
+    )}
+  </div>
+</div>
+
   
 
         {/*Query Submit Section*/}
