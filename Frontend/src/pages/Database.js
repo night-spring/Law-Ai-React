@@ -288,12 +288,14 @@ const Database = () => {
       {activeCase && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="modal bg-white w-10/12 md:w-7/12 h-3/4 p-6 rounded-lg overflow-auto shadow-lg relative">
+          <div className="sticky top-2 flex justify-end">
             <button
               onClick={closeCaseDetailsModal}
-              className="absolute top-2 right-2 text-2xl text-gray-600"
+              className="sticky top-2 right-2 text-2xl text-gray-600"
             >
               &times;
             </button>
+            </div>
             <div className="space-y-6">
               <h3 className="text-3xl font-semibold text-blue-900 border-b pb-2">
                 {isEditing ? (
