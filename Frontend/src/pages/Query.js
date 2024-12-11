@@ -12,19 +12,19 @@ const Query = () => {
     `<h2 class="text-xl font-semibold mb-4">Detailed Section</h2>
      <div>This Section will display a detailed Description of What Acts are applicable in the FIR query you entered.</div>`
   );
-  const [activeButtonIndex, setActiveButtonIndex] = React.useState(null); 
+  const [activeQuery, setActiveQuery] = useState(null);
   const [isListening, setIsListening] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [activeButtonIndex, setActiveButtonIndex] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const [tagInput, setTagInput] = useState('');
-  const [activeButton, setActiveButton] = React.useState(null); // Track which button is toggled
-  const [loading, setLoading] = React.useState(false); // Loading state
-  const [error, setError] = React.useState(null); // Error state
-  const [searchResults, setSearchResults] = React.useState(null); 
+  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedActType, setSelectedActType] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [language, setLanguage] = useState(localStorage.getItem('language') || 'en');
   const [caseData, setCaseData] = useState({
@@ -107,42 +107,46 @@ const Query = () => {
     if (loading) {
       return <div className="text-lg text-gray-500">Loading...</div>;
     }
-  
+
     if (error) {
       return <div className="text-red-500 font-semibold">{error}</div>;
     }
-  
+
+    // If no data is returned
     if (!searchResults || Object.keys(searchResults).length === 0) {
       return (
         <div>
           <h3 className="text-xl font-semibold mb-2">Summary Section</h3>
-          <div className="text-gray-600">
-            This Section will display all the Summary of the Acts and the Sections applicable for your requested query.
-            Details will appear on clicking each of the section buttons.
-          </div>
+          <div className="text-gray-600">This Section will display all the Summary of the Acts and the Sections applicable for your requested query. Details will appear on clicking each of the section buttons.</div>
         </div>
       );
     }
-  
+
     const { section, title, description } = searchResults.data;
-  
+
     return (
       <div className="p-6 bg-white shadow-md rounded-lg">
         <h3 className="text-xl font-semibold text-gray-800 mb-4">Search Results:</h3>
-  
+
+        {/* Display section */}
         <div className="mb-4">
           <span className="text-sm font-semibold text-gray-500">Section:</span>
           <div className="text-lg text-blue-600">{section}</div>
         </div>
-  
+
+        {/* Display title */}
         <div className="mb-4">
           <span className="text-sm font-semibold text-gray-500">Title:</span>
           <div className="text-lg font-medium text-gray-800">{title}</div>
         </div>
-  
+
+        {/* Display description */}
         <div>
           <span className="text-sm font-semibold text-gray-500">Description:</span>
-          <div className="bg-gray-100 p-4 rounded-lg text-gray-700" style={{ whiteSpace: 'pre-wrap' }}>
+          <div
+            className="bg-gray-100 p-4 rounded-lg text-gray-700"
+            style={{ whiteSpace: 'pre-wrap' }} // Preserve newlines in description
+          >
             {description}
           </div>
         </div>
@@ -150,18 +154,7 @@ const Query = () => {
     );
   };
 
-  const handleToggle = (index, actName, query) => {
-  if (activeButtonIndex === index) {
-    // Toggle off the active button
-    setActiveButtonIndex(null);
-    return;
-  }
-  // Set the clicked button as active
-  setActiveButtonIndex(index);
-  handleSearch(null, actName, query); // Call the search function with appropriate parameters
-};
 
-  
 
 
 
@@ -344,32 +337,32 @@ const Query = () => {
 
         {/* Modal display */}
         {isModalVisible && (
-  <div className="modal-overlay fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-    <div className="modal-content bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
-      <h3 className="modal-title text-3xl text-blue-600 font-semibold mb-4 text-center">
-        How It Works
-      </h3>
+          <div className="modal-overlay fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+            <div className="modal-content bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
+              <h3 className="modal-title text-3xl text-blue-600 font-semibold mb-4 text-center">
+                How It Works
+              </h3>
 
-      <div className="modal-body text-center">
-        <p className="text-lg">
-          Type in any criminal incident and the model will try to determine the acts and sections applicable with the incident.
-        </p>
-      </div>
-      <div className="modal-footer mt-4 flex justify-center">
-        <button
-          onClick={toggleVisibility}
-          className="glow-button bg-blue-600 text-white font-semibold text-lg py-3 px-6 rounded-lg shadow-lg cursor-pointer hover:bg-blue-700 transition duration-200 animate-pulse"
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
+              <div className="modal-body text-center">
+                <p className="text-lg">
+                  Type in any criminal incident and the model will try to determine the acts and sections applicable with the incident.
+                </p>
+              </div>
+              <div className="modal-footer mt-4 flex justify-center">
+                <button
+                  onClick={toggleVisibility}
+                  className="close-modal-btn bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
+
 
   return (
     <div className="query-page-container">
@@ -496,23 +489,31 @@ const Query = () => {
           const actName = actNames[item.act];
           if (!actName) return null;
         
-          const isActive = activeButtonIndex === index; // Check if the button is active
+          // Check if this button is the active one based on the query or other criteria
+          const isActive = item.query === activeQuery;
         
           return (
             <button
               key={index}
-              onClick={() => setActiveButtonIndex(isActive ? null : index)} // Toggle active state
-              className={`bg-blue-100 text-blue-600 px-3 py-1 rounded-lg text-sm hover:bg-blue-600 hover:text-white transition duration-200 mb-1 ${isActive ? 'bg-blue-800 text-white' : ''}`}
+              onClick={(e) => {
+                // Set the active query when the button is clicked
+                setActiveQuery(item.query);
+                handleSearch(e, actName, item.query);
+              }}
+              className={`${
+                isActive
+                  ? "bg-blue-300 text-blue-800 hover:bg-blue-500 hover:text-white"  // Darker blue for active
+                  : "bg-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white"  // Lighter blue for inactive
+              } px-3 py-1 rounded-lg text-sm transition duration-200 mb-1`}
             >
               {`ACT : ${actName.toUpperCase()}, SECTION :${item.query ? ` ${item.query}` : ""}`}
             </button>
           );
         });
-
+        
         return (
           <>
             <div className="flex flex-wrap gap-2">{renderButtons}</div>
-
             <div className="mt-4">
               <button onClick={(e) => handleSearch(e)}></button>
               {renderSearchResults()}
