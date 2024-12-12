@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
+import { FaMicrophone } from 'react-icons/fa';
 
 const Query = () => {
   const [query, setQuery] = useState('');
@@ -15,8 +16,34 @@ const Query = () => {
   };
 
   const handleMicClick = () => {
-    console.log('Microphone functionality is not implemented for web.');
-    setIsListening(!isListening);
+    if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+      alert('Your browser does not support voice recognition. Please use Chrome or Edge.');
+      return;
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event) => {
+      const spokenText = event.results[0][0].transcript;
+      setQuery((prevQuery) => prevQuery + ' ' + spokenText);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.onerror = (event) => {
+      console.error('Speech recognition error:', event.error);
+      setIsListening(false);
+    };
+
+    recognition.start();
   };
 
   const handleInputChange = (event) => {
@@ -45,6 +72,12 @@ const Query = () => {
     }
 
     setIsLoading(false);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleQuerySubmit();
+    }
   };
 
   const renderResponse = (data) => {
@@ -80,7 +113,7 @@ const Query = () => {
   return (
     <div style={styles.pageContainer}>
       <Sidebar />
-      <div style={styles.contentContainer}>
+      <div style={styles.mainContent}>
         <div style={styles.responseBox}>
           {isLoading ? (
             <p>Loading...</p>
@@ -96,12 +129,13 @@ const Query = () => {
             type="text"
             value={query}
             onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
             placeholder="Type your query here..."
             style={styles.input}
           />
           <button onClick={handleMicClick} style={styles.micButton}>
-            <span style={{ color: isListening ? 'blue' : 'black' }}>🎤</span>
-          </button>
+  <FaMicrophone style={{ color: isListening ? 'blue' : 'black', fontSize: '24px' }} />
+</button>
         </div>
 
         <button onClick={handleQuerySubmit} style={styles.submitButton}>
@@ -117,9 +151,9 @@ const styles = {
   pageContainer: {
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '100vh',
+    height: '100vh',
   },
-  contentContainer: {
+  mainContent: {
     flex: 1,
     padding: '20px',
     backgroundColor: '#f5f5f5',
@@ -157,6 +191,8 @@ const styles = {
     cursor: 'pointer',
   },
   submitButton: {
+    margin: '0 auto',
+    display: 'block',
     padding: '15px 20px',
     backgroundColor: '#007bff',
     color: '#fff',
