@@ -213,39 +213,73 @@ const Query = () => {
     setError('');
 
     try {
-      const response = await fetch('https://sih-backend-seven.vercel.app/ai/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query: query }),
-      });
+        const response = await fetch('https://sih-backend-881i.onrender.com/encode/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ query: query }),
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      // Translate the response based on the selected language
-      const translatedResponse = translateResponse(data.response || 'No response received', language);
+        // Ensure the crime_code is a string and pad it with zeros if necessary
+        const formattedData = {
+            crime_code: data.crime_code.toString().padStart(4, '0'), // Padded to 4 digits
+        };
 
-      // Parse response into relevant fields
-      setCaseData({
-        query,
-        caseHeading: data.caseHeading || 'Untitled Case',
-        applicableArticles: translatedResponse || 'No applicable articles',
-        tags: [],
-      });
+        // Save the formatted response
+        setCaseData(formattedData);
 
-      // Set the translated response (already translated)
-      setResponse(translatedResponse);
-      setShowPopup(true); // Show popup
+        // Optional: Display the formatted response
+        setResponse(formattedData);
+
+        setShowPopup(true); // Show popup
     } catch (error) {
-      console.error('Error fetching the response:', error);
-      setError('Error occurred while fetching the response');
-      setResponse('');
+        console.error('Error fetching the response:', error);
+        setError('Error occurred while fetching the response');
+        setResponse('');
     }
 
     setIsLoading(false);
     setQuery('');
-  };
+};
+const handleDecodeSubmit = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
+  setError('');
+
+  try {
+      // Extract the number part from caseData.crime_code
+      const crimeCodeNumber = caseData.crime_code;
+
+      const response = await fetch('http://sih-backend-881i.onrender.com/decode/', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ crime_code: crimeCodeNumber }),  // Only number part
+      });
+
+      const data = await response.json();
+
+      // Save the new response
+      setDecodedData(data);
+
+      // Optional: Display the new response
+      setResponse(JSON.stringify(data, null, 2));
+
+      setShowPopup(true); // Show popup
+  } catch (error) {
+      console.error('Error fetching the response:', error);
+      setError('Error occurred while fetching the response');
+      setResponse('');
+  }
+
+  setIsLoading(false);
+};
+
+
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);

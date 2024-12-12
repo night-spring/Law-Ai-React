@@ -34,10 +34,16 @@ const BareActs = () => {
     const fetchLaws = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(
-          "https://sih-backend-seven.vercel.app/database/"
+        const response = await axios.get("https://sih-backend-881i.onrender.com/database/");
+        const lawsData = response.data.data; // Adjust based on the exact structure of the response
+  
+        // Map through the laws to initialize showDescription
+        setLaws(
+          lawsData.map((law) => ({
+            ...law,
+            showDescription: false, // Initialize toggle state for each law
+          }))
         );
-        setLaws(response.data.data);
       } catch (err) {
         console.error("Error fetching laws:", err);
         setError("Failed to fetch laws data.");
@@ -45,9 +51,9 @@ const BareActs = () => {
         setLoading(false);
       }
     };
-
-    fetchLaws();
-  }, []);
+  
+    fetchLaws(); // Call the function on component mount
+  }, []); // Empty dependency array to ensure it o
 
   useEffect(() => {
     const handleResize = () => {
@@ -85,7 +91,7 @@ const BareActs = () => {
 
     try {
       const response = await axios.post(
-        "https://sih-backend-seven.vercel.app/search/",
+        "https://sih-backend-881i.onrender.com/search/",
         {
           query: searchQuery || "", // Send an empty string if searchQuery is not provided
           act: selectedActType,     // Always include `selectedActType`
@@ -113,7 +119,7 @@ const BareActs = () => {
 
       try {
         const response = await axios.get(
-          "https://sih-backend-seven.vercel.app/pdfs/"
+          "https://sih-backend-881i.onrender.com/pdfs/"
         );
         setPdfs(response.data); // Assuming the response contains the list of PDFs with metadata
         setFilteredPdfs(response.data); // Set initial filtered PDFs to all PDFs
@@ -152,7 +158,7 @@ const BareActs = () => {
     try {
       // Fetch the PDF file for download using the pdfId
       const response = await axios.get(
-        `https://sih-backend-seven.vercel.app/pdfs/${pdfId}/download/`,
+        `https://sih-backend-881i.onrender.com/pdfs/${pdfId}/download/`,
         { responseType: "blob" } // Ensure we get binary PDF data
       );
 
@@ -184,7 +190,7 @@ const BareActs = () => {
     try {
       // Fetch the PDF file for preview using the pdfId
       const response = await axios.get(
-        `https://sih-backend-seven.vercel.app/pdfs/${pdfId}/download/`,
+        `https://sih-backend-881i.onrender.com/pdfs/${pdfId}/download/`,
         { responseType: "blob" } // Ensure we get binary PDF data
       );
 
@@ -240,7 +246,7 @@ const BareActs = () => {
       // If act is selected and query is empty, set query as an empty string and search by act  
       if (!payload.query && payload.act) {
         const apiResponse = await axios.post(
-          "https://sih-backend-seven.vercel.app/search/",
+          "https://sih-backend-881i.onrender.com/search/",
           { query: '', act: payload.act }
         );
 
@@ -256,7 +262,7 @@ const BareActs = () => {
 
       // If both fields are filled, proceed with the search  
       const apiResponse = await axios.post(
-        "https://sih-backend-seven.vercel.app/search/",
+        "https://sih-backend-881i.onrender.com/search/",
         payload
       );
 
@@ -424,57 +430,49 @@ const BareActs = () => {
             ) : (
               // Case 3: Neither `selectedActType` nor `searchQuery` is present
               <div className="all-laws bg-gray-50 p-8 rounded-lg shadow-md border border-gray-200">
-                <h3 className="text-3xl font-semibold text-blue-900 mb-6">
-                  Bare Acts
-                </h3>
-                {loading ? (
-                  <p className="text-gray-500 italic mt-4">Loading...</p>
-                ) : error ? (
-                  <p className="text-red-500 italic mt-4">{error}</p>
-                ) : laws.length > 0 ? (
-                  <div className="space-y-6">
-                    {laws.map((law) => (
-                      <div
-                        key={law.id}
-                        className="law-item p-6 bg-white border border-gray-300 rounded-xl shadow-md hover:shadow-xl transition-transform duration-300 transform hover:scale-105 border-l-[4px] border-l-blue-500"
-                      >
-                        <h4 className="law-title text-2xl font-semibold text-blue-800">
-                          Section {law.section_id}
-                        </h4>
-                        <p className="text-lg font-bold text-black mt-2">
-                          {law.section_title}
-                        </p>
-                        <button
-                          onClick={() =>
-                            setLaws((prevLaws) =>
-                              prevLaws.map((l) =>
-                                l.id === law.id
-                                  ? {
-                                    ...l,
-                                    showDescription: !l.showDescription,
-                                  }
-                                  : l
-                              )
+              <h3 className="text-3xl font-semibold text-blue-900 mb-6">Bare Acts</h3>
+              {loading ? (
+                <p className="text-gray-500 italic mt-4">Loading...</p>
+              ) : error ? (
+                <p className="text-red-500 italic mt-4">{error}</p>
+              ) : laws.length > 0 ? (
+                <div className="space-y-6">
+                  {laws.map((law) => (
+                    <div
+                      key={law.id}
+                      className="law-item p-6 bg-white border border-gray-300 rounded-xl shadow-md hover:shadow-xl transition-transform duration-300 transform hover:scale-105 border-l-[4px] border-l-blue-500"
+                    >
+                      <h4 className="law-title text-2xl font-semibold text-blue-800">
+                        Section {law.section_id}
+                      </h4>
+                      <p className="text-lg font-bold text-black mt-2">
+                        {law.section_title}
+                      </p>
+                      <button
+                        onClick={() =>
+                          setLaws((prevLaws) =>
+                            prevLaws.map((l) =>
+                              l.id === law.id
+                                ? { ...l, showDescription: !l.showDescription }
+                                : l
                             )
-                          }
-                          className="text-blue-600 hover:underline mt-4"
-                        >
-                          {law.showDescription
-                            ? "Hide Description"
-                            : "Show Description"}
-                        </button>
-                        {law.showDescription && (
-                          <p className="mt-4 text-gray-600">{law.description}</p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-gray-500 italic mt-4">
-                    No bare acts available.
-                  </p>
-                )}
-              </div>
+                          )
+                        }
+                        className="text-blue-600 hover:underline mt-4"
+                      >
+                        {law.showDescription ? "Hide Description" : "Show Description"}
+                      </button>
+                      {law.showDescription && (
+                        <p className="mt-4 text-gray-600">{law.description}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500 italic mt-4">No bare acts available.</p>
+              )}
+            </div>
+            
             )}
           </div>
         ) : (

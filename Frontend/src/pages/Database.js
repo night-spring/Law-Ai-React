@@ -13,7 +13,7 @@ const Database = () => {
 
   // Fetch data from the endpoint
   useEffect(() => {
-    fetch('https://sih-backend-seven.vercel.app/case_list/')
+    fetch('https://sih-backend-881i.onrender.com/case_list/')
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to fetch data');
@@ -138,10 +138,13 @@ const Database = () => {
       alert('Please fill in all required fields.');
       return;
     }
-
+  
     // Prepare the request body dynamically with only the updated fields
     const updatedData = {};
-
+  
+    // Ensure the case ID is included in the request body
+    updatedData.id = activeCase.id; // ID should never change, it's part of the data
+  
     // Check if each field has been modified; if so, include it in the request body
     if (editedCaseData.caseHeading !== activeCase.caseHeading) {
       updatedData.caseHeading = editedCaseData.caseHeading;
@@ -161,19 +164,18 @@ const Database = () => {
     if (editedCaseData.tags !== activeCase.tags) {
       updatedData.tags = editedCaseData.tags;  // Add tags to updatedData if changed
     }
-
-
+  
     // Log the request body for debugging
     console.log('Request body:', updatedData);
-
+  
     // Ensure there is at least one field to update
-    if (Object.keys(updatedData).length === 0) {
+    if (Object.keys(updatedData).length === 1 && updatedData.id) { // Only ID is present
       alert('No changes to update.');
       return;
     }
-
+  
     // Send the POST request with only the updated fields
-    fetch(`https://sih-backend-seven.vercel.app/case_update/${activeCase.id}/`, {
+    fetch(`https://sih-backend-881i.onrender.com/case_update/${activeCase.id}/`, {
       method: 'POST', // Use POST for updating
       headers: {
         'Content-Type': 'application/json', // Set content type to JSON
@@ -193,7 +195,7 @@ const Database = () => {
         const updatedCases = cases.map((caseItem) =>
           caseItem.id === updatedCase.id ? updatedCase : caseItem
         );
-
+  
         setCases(updatedCases); // Update the state with the new case data
         setActiveCase(null); // Close modal after saving changes
         alert('Case updated successfully!');
@@ -203,7 +205,8 @@ const Database = () => {
         alert('Failed to update the case. Please try again.');
       });
   };
-
+  
+  
   return (
     <div className="bareacts-container min-h-screen flex flex-col">
       {isMobile ? <MenuBar /> : <Sidebar />}
@@ -285,192 +288,192 @@ const Database = () => {
         </button>
       )}
 
-      {activeCase && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="modal bg-white w-10/12 md:w-7/12 h-3/4 p-6 rounded-lg overflow-auto shadow-lg relative">
-          <div className="sticky top-2 flex justify-end">
-            <button
-              onClick={closeCaseDetailsModal}
-              className="sticky top-2 right-2 text-2xl text-gray-600"
-            >
-              &times;
-            </button>
-            </div>
-            <div className="space-y-6">
-              <h3 className="text-3xl font-semibold text-blue-900 border-b pb-2">
-                {isEditing ? (
-                  <input
-                    name="caseHeading"
-                    type="text"
-                    value={editedCaseData.caseHeading || activeCase.caseHeading || ''}
-                    onChange={handleInputChange}
-                    className="text-3xl font-semibold text-blue-900 w-full bg-transparent border-none"
-                  />
-                ) : (
-                  activeCase.caseHeading
-                )}
-              </h3>
-              <p className="text-lg font-medium text-black-500">
-                <span className="font-semibold">Query:</span>{' '}
-                {isEditing ? (
-                  <textarea
-                    name="query"
-                    value={editedCaseData.query || activeCase.query || ''}
-                    onChange={handleInputChange}
-                    className="w-full p-2 mt-2 border rounded-md"
-                    rows="3"
-                  />
-                ) : (
-                  activeCase.query
-                )}
-              </p>
-              <div>
-                <span className="font-semibold">Applicable Articles:</span>
-                {isEditing ? (
-                  <input
-                    name="applicableArticle"
-                    value={editedCaseData.applicableArticle || activeCase.applicableArticle || ''}
-                    onChange={handleInputChange}
-                    className="w-full p-2 mt-2 border rounded-md"
-                  />
-                ) : (
-                  // Extract and display all content between **, each on a new line
-                  activeCase.applicableArticle
-                    ? activeCase.applicableArticle
-                      .match(/\*\*(.*?)\*\*/g) // Capture text between ** markers
-                      ?.map((match, index) => (
-                        <div key={index} className="mt-2">
-                          {match.replace(/\*\*/g, '')} {/* Remove the ** markers */}
-                        </div>
-                      )) || 'No applicable article found'
-                    : 'No applicable article found'
-                )}
-              </div>
-              <div>
-  <span className="font-semibold">Tags:</span>
-  {isEditing ? (
-    <div>
-      {/* Display the existing tags as a list with remove option */}
-      <div className="flex flex-wrap gap-2 mb-2">
-        {editedCaseData.tags
-          ? editedCaseData.tags
-              .replace(/[\[\]']+/g, '') // Clean up the tag string
-              .split(',')
-              .map((tag, index) => (
-                <span
-                  key={index}
-                  className="inline-block bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm"
-                >
-                  {tag.trim()}
-                  {/* Cross (x) to remove tag */}
-                  <button
-                    onClick={() =>handleRemoveTag(index)}
-                    className="ml-2 text-blue-600 hover:text-blue-800"
-                  >
-                    &times;
-                  </button>
-                </span>
-              ))
-          : 'No tags available'}
+{activeCase && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className="modal bg-white w-10/12 md:w-7/12 h-3/4 p-6 rounded-lg overflow-auto shadow-lg relative">
+      <div className="sticky top-2 flex justify-end">
+        <button
+          onClick={closeCaseDetailsModal}
+          className="sticky top-2 right-2 text-2xl text-gray-600"
+        >
+          &times;
+        </button>
       </div>
-      {/* Input for new tag */}
-      <input
-        name="tags"
-        value={editedCaseData.tags || activeCase?.tags || ''}
-        onChange={handleInputChange}
-        className="w-full p-2 mt-2 border rounded-md"
-        placeholder="Enter tags, separated by commas"
-      />
-      {/* Plus (+) button to add a new tag */}
-      <button
-        onClick={handleAddTag}
-        className="mt-2 text-blue-600 hover:text-blue-800"
-      >
-        + Add Tag
-      </button>
-    </div>
-  ) : (
-    // Display tags as a list of spans when not in editing mode
-    activeCase?.tags
-      ? activeCase.tags
-          .replace(/[\[\]']+/g, '') // Clean up the tag string
-          .split(',')
-          .map((tag, index) => (
-            <span
-              key={index}
-              className="inline-block bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm mr-2 mb-2"
-            >
-              {tag.trim()}
-            </span>
-          ))
-      : 'No tags available'
-  )}
-</div>
 
+      <div className="space-y-6">
+        <h3 className="text-3xl font-semibold text-blue-900 border-b pb-2">
+          {isEditing ? (
+            <input
+              name="caseHeading"
+              type="text"
+              value={editedCaseData.caseHeading || activeCase.caseHeading || ''}
+              onChange={handleInputChange}
+              className="text-3xl font-semibold text-blue-900 w-full bg-transparent border-none"
+            />
+          ) : (
+            activeCase.caseHeading
+          )}
+        </h3>
 
-              <div>
-                <span className="font-semibold">Description:</span>
-                {isEditing ? (
-                  <textarea
-                    name="description"
-                    value={editedCaseData.description || activeCase.description || ''}
-                    onChange={handleInputChange}
-                    className="w-full p-2 mt-2 border rounded-md"
-                    rows="4"
-                  />
-                ) : (
-                  activeCase.description
-                )}
-              </div>
-              <div className="relative">
-                <select
-                  name="status"
-                  value={editedCaseData.status || activeCase.status || ''}
-                  onChange={handleInputChange}
-                  className={`w-full p-2 mt-2 border rounded-md bg-white appearance-none 
-                  ${editedCaseData.status === 'assigned' || activeCase.status === 'assigned' ? 'bg-green-200' : ''}
-                  ${editedCaseData.status === 'under-investigation' || activeCase.status === 'under-investigation' ? 'bg-yellow-100' : ''}
-                  ${editedCaseData.status === 'closed' || activeCase.status === 'closed' ? 'bg-red-100' : ''}`}
-                >
-                  <option
-                    value="assigned"
-                    className={`${(editedCaseData.status === 'assigned' || activeCase.status === 'assigned') ? 'bg-green-200' : ''
-                      }`}
-                  >
-                    Assigned
-                  </option>
-                  <option
-                    value="under-investigation"
-                    className={`${(editedCaseData.status === 'under-investigation' || activeCase.status === 'under-investigation') ? 'bg-yellow-100' : ''
-                      }`}
-                  >
-                    Under Investigation
-                  </option>
-                  <option
-                    value="closed"
-                    className={`${(editedCaseData.status === 'closed' || activeCase.status === 'closed') ? 'bg-red-100' : ''
-                      }`}
-                  >
-                    Closed
-                  </option>
-                </select>
+        <p className="text-lg font-medium text-black-500">
+          <span className="font-semibold">Query:</span>{' '}
+          {isEditing ? (
+            <textarea
+              name="query"
+              value={editedCaseData.query || activeCase.query || ''}
+              onChange={handleInputChange}
+              className="w-full p-2 mt-2 border rounded-md"
+              rows="3"
+            />
+          ) : (
+            activeCase.query
+          )}
+        </p>
 
-              </div>
-
-              {isEditing && (
-                <div className="mt-4">
-                  <button
-                    onClick={saveCaseChanges} // Save changes using the updated function
-                    className="px-6 py-2 bg-blue-600 text-white rounded-lg"
-                  >
-                    Save Changes
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
+        <div>
+          <span className="font-semibold">Applicable Articles:</span>
+          {isEditing ? (
+            <input
+              name="applicableArticle"
+              value={editedCaseData.applicableArticle || activeCase.applicableArticle || ''}
+              onChange={handleInputChange}
+              className="w-full p-2 mt-2 border rounded-md"
+            />
+          ) : (
+            activeCase.applicableArticle
+              ? activeCase.applicableArticle
+                  .match(/\*\*(.*?)\*\*/g)
+                  ?.map((match, index) => (
+                    <div key={index} className="mt-2">
+                      {match.replace(/\*\*/g, '')}
+                    </div>
+                  )) || 'No applicable article found'
+              : 'No applicable article found'
+          )}
         </div>
-      )}
+
+        <div>
+          <span className="font-semibold">Tags:</span>
+          {isEditing ? (
+            <div>
+              {/* Display the existing tags as a list with remove option */}
+              <div className="flex flex-wrap gap-2 mb-2">
+                {editedCaseData.tags
+                  ? editedCaseData.tags
+                      .replace(/[\[\]']+/g, '')
+                      .split(',')
+                      .map((tag, index) => (
+                        <span
+                          key={index}
+                          className="inline-block bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm"
+                        >
+                          {tag.trim()}
+                          {/* Cross (x) to remove tag */}
+                          <button
+                            onClick={() => handleRemoveTag(index)}
+                            className="ml-2 text-blue-600 hover:text-blue-800"
+                          >
+                            &times;
+                          </button>
+                        </span>
+                      ))
+                  : 'No tags available'}
+              </div>
+              {/* Input for new tag */}
+              <input
+                name="tags"
+                value={editedCaseData.tags || activeCase?.tags || ''}
+                onChange={handleInputChange}
+                className="w-full p-2 mt-2 border rounded-md"
+                placeholder="Enter tags, separated by commas"
+              />
+              {/* Plus (+) button to add a new tag */}
+              <button
+                onClick={handleAddTag}
+                className="mt-2 text-blue-600 hover:text-blue-800"
+              >
+                + Add Tag
+              </button>
+            </div>
+          ) : (
+            // Display tags as a list of spans when not in editing mode
+            activeCase?.tags
+              ? activeCase.tags
+                  .replace(/[\[\]']+/g, '') // Clean up the tag string
+                  .split(',')
+                  .map((tag, index) => (
+                    <span
+                      key={index}
+                      className="inline-block bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm mr-2 mb-2"
+                    >
+                      {tag.trim()}
+                    </span>
+                  ))
+              : 'No tags available'
+          )}
+        </div>
+
+        <div>
+          <span className="font-semibold">Description:</span>
+          {isEditing ? (
+            <textarea
+              name="description"
+              value={editedCaseData.description || activeCase.description || ''}
+              onChange={handleInputChange}
+              className="w-full p-2 mt-2 border rounded-md"
+              rows="4"
+            />
+          ) : (
+            activeCase.description
+          )}
+        </div>
+
+        <div className="relative">
+          <select
+            name="status"
+            value={editedCaseData.status || activeCase.status || ''}
+            onChange={handleInputChange}
+            className={`w-full p-2 mt-2 border rounded-md bg-white appearance-none 
+              ${editedCaseData.status === 'assigned' || activeCase.status === 'assigned' ? 'bg-green-200' : ''}
+              ${editedCaseData.status === 'under-investigation' || activeCase.status === 'under-investigation' ? 'bg-yellow-100' : ''}
+              ${editedCaseData.status === 'closed' || activeCase.status === 'closed' ? 'bg-red-100' : ''}`}
+          >
+            <option
+              value="assigned"
+              className={`${(editedCaseData.status === 'assigned' || activeCase.status === 'assigned') ? 'bg-green-200' : ''}`}
+            >
+              Assigned
+            </option>
+            <option
+              value="under-investigation"
+              className={`${(editedCaseData.status === 'under-investigation' || activeCase.status === 'under-investigation') ? 'bg-yellow-100' : ''}`}
+            >
+              Under Investigation
+            </option>
+            <option
+              value="closed"
+              className={`${(editedCaseData.status === 'closed' || activeCase.status === 'closed') ? 'bg-red-100' : ''}`}
+            >
+              Closed
+            </option>
+          </select>
+        </div>
+
+        {isEditing && (
+          <div className="mt-4">
+            <button
+              onClick={saveCaseChanges} // Save changes using the updated function
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg"
+            >
+              Save Changes
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
