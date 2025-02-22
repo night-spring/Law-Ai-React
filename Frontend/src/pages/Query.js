@@ -55,7 +55,7 @@ const Query = () => {
     setError('');
 
     try {
-      const response = await fetch('https://sih-backend-881i.onrender.com/encode/', {
+      const response = await fetch('https://chatbot-for-fir-backend.vercel.app/api/gemini/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
