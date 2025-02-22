@@ -14,8 +14,10 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import Accessibility from './pages/Accessibility';
 import TermsAndConditions from './pages/TermsAndConditions';
 import FIRDownload from './pages/FIRDownload';
+import { ModeProvider } from './ModeContext';
 function App() {
   return (
+    <ModeProvider>
     <ThemeProvider>
       <Router>
         <div className="App">
@@ -39,6 +41,7 @@ function App() {
         </div>
       </Router>
     </ThemeProvider>
+    </ModeProvider>
   );
 }
 
